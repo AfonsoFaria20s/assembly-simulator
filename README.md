@@ -26,7 +26,7 @@ This is a basic assembly language simulator written in Java. It supports basic a
 
 1. Clone the repository:
     ```sh
-    git clone https://github.com/yourusername/assembly-simulator.git
+    git clone https://github.com/AfonsoFaria20s/assembly-simulator.git
     cd assembly-simulator
     ```
 
