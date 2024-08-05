@@ -1,0 +1,2 @@
+mov eax #10
+mov ecx #90

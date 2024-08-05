@@ -1,26 +1,28 @@
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Paths;
+import java.util.List;
+
 public class Main {
     public static void main(String[] args) {
-        /*
-            Example program:
-            pc |    instruction   |           explanation            |
-            ---|------------------|----------------------------------|
-            1  | MOV R1, 10       | Set register 1 to 10             |
-            2  | MOV R2, 20       | Set register 2 to 20             |
-            3  | JMP_LT R1, R2, 5 | If R1 < R2 jump to instruction 5 |
-            4  | MOV R3, 4        | Set register 3 to 4              |
-            5  |MOV R3, 7         | Set register 3 to 7              |
-         */
+        // Path to the program.txt file
+        String filePath = "src/program.txt"; // Update this path if necessary
 
-        int[] program = {
-                0x0101000A, // MOV R1, 10
-                0x01020014, // MOV R2, 20
-                0x10010205, // JMP_LT R1, R2, 5
-                0x01030004, // MOV R3, 4
-                0x01030007  // MOV R3, 7
-        };
+        try {
+            // Read all lines from the file into a List<String>
+            List<String> lines = Files.readAllLines(Paths.get(filePath));
 
-        Assembly asm = new Assembly();
-        asm.loadProgram(program);
-        asm.execute();
+            // Convert List<String> to String[]
+            String[] program = lines.toArray(new String[0]);
+
+            // Create an Assembly instance with appropriate size
+            Assembly asm = new Assembly(program.length);
+            asm.loadProgram(program);
+            asm.execute();
+
+        } catch (IOException e) {
+            // Handle potential IOExceptions such as file not found
+            System.err.println("Error reading the file: " + e.getMessage());
+        }
     }
 }
