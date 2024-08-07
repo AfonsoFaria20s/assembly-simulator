@@ -1,3 +1,6 @@
+import GUI.Window;
+
+import javax.swing.*;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
@@ -5,6 +8,8 @@ import java.util.List;
 
 public class Main {
     public static void main(String[] args) {
+        SwingUtilities.invokeLater(Window::new);
+
         // Path to the program.txt file
         String filePath = "src/program.txt"; // Update this path if necessary
 

@@ -7,16 +7,16 @@ public class Assembler {
     private static final Map<String, Integer> ARG_COUNTS = new HashMap<>();
 
     static {
-        OPCODES.put("mov", 0x01);
-        OPCODES.put("add", 0x02);
-        OPCODES.put("sub", 0x03);
-        OPCODES.put("mul", 0x04);
-        OPCODES.put("div", 0x05);
-        OPCODES.put("and", 0x06);
-        OPCODES.put("or", 0x07);
-        OPCODES.put("str", 0x08);
-        OPCODES.put("ld", 0x09);
-        OPCODES.put("jmp", 0x0A);
+        OPCODES.put("mov",  0x01);
+        OPCODES.put("add",  0x02);
+        OPCODES.put("sub",  0x03);
+        OPCODES.put("mul",  0x04);
+        OPCODES.put("div",  0x05);
+        OPCODES.put("and",  0x06);
+        OPCODES.put("or",   0x07);
+        OPCODES.put("str",  0x08);
+        OPCODES.put("ld",   0x09);
+        OPCODES.put("jmp",  0x0A);
         OPCODES.put("jmpe", 0x0B);
         OPCODES.put("jmpn", 0x0C);
         OPCODES.put("jmpg", 0x0D);
