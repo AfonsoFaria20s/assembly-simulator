@@ -8,6 +8,7 @@ This is a basic assembly language simulator written in Java. It supports basic a
 - **Logical Operations**: Bitwise AND and OR.
 - **Memory Operations**: Loading from and storing to memory.
 - **Control Flow**: Jump instructions to alter the sequence of execution.
+- **Graphical User Interface (GUI)**: Provides a user-friendly interface for interacting with the simulator.
 - **Conditional Jumps**: Conditional jumps based on equality, inequality, and relational operators.
 
 ## Instructions
