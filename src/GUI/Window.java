@@ -12,13 +12,14 @@ public class Window extends JFrame {
         setLocationRelativeTo(null);
         setExtendedState(JFrame.MAXIMIZED_BOTH);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        setVisible(true);
 
         // Create panels for registers, memory, flags, editor, and menu
         RegistersPanel registersPanel = new RegistersPanel();
         MemoryPanel memoryPanel = new MemoryPanel();
         FlagsPanel flagsPanel = new FlagsPanel();
         EditorPanel editorPanel = new EditorPanel();
-        MenuPanel menuPanel = new MenuPanel();
+        MenuPanel menuPanel = new MenuPanel(editorPanel, this);
 
         // Left panel (registers and memory)
         JSplitPane leftSplitPane = new JSplitPane(JSplitPane.VERTICAL_SPLIT, registersPanel, memoryPanel);
@@ -43,12 +44,9 @@ public class Window extends JFrame {
         add(menuPanel, BorderLayout.NORTH);
         // Add main split pane to the frame
         add(mainSplitPane, BorderLayout.CENTER);
-
-        setVisible(true);
     }
 
-
-    public int getFrameWidth() {
-        return this.getWidth();
+    public void updateTitle(String title) {
+        this.setTitle("Assembly Simulator - " + title);
     }
 }

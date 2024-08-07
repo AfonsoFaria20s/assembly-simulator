@@ -62,31 +62,31 @@ The following Java code demonstrates how to set up and run a program with the si
 
 ```java
 public class Main {
-    public static void main(String[] args) {
-        // Path to the program.txt file
-        String filePath = "program.txt"; // Update this path if necessary
+   public static void main(String[] args) {
+      // Path to the program.txt file
+      String filePath = "program.txt"; // Update this path if necessary
 
-        try {
-            // Read all lines from the file into a List<String>
-            List<String> lines = Files.readAllLines(Paths.get(filePath));
-            
-            // Convert List<String> to String[]
-            String[] program = lines.toArray(new String[0]);
-            
-            // Create an Assembly instance with appropriate size
-            Assembly asm = new Assembly(program.length);
-            
-            // Load the program instructions into the Assembly instance
-            asm.loadProgram(program);
-            
-            // Execute the loaded program
-            asm.execute();
-            
-        } catch (IOException e) {
-            // Handle potential IOExceptions such as file not found
-            System.err.println("Error reading the file: " + e.getMessage());
-        }
-    }
+      try {
+         // Read all lines from the file into a List<String>
+         List<String> lines = Files.readAllLines(Paths.get(filePath));
+
+         // Convert List<String> to String[]
+         String[] program = lines.toArray(new String[0]);
+
+         // Create an Assembly instance with appropriate size
+         Assembly asm = new Assembly(program.length);
+
+         // Load the program instructions into the Assembly instance
+         asm.loadProgram(program);
+
+         // Execute the loaded program
+         asm.execute();
+
+      } catch (IOException e) {
+         // Handle potential IOExceptions such as file not found
+         System.err.println("Error reading the file: " + e.getMessage());
+      }
+   }
 }
 ```
 # Notes

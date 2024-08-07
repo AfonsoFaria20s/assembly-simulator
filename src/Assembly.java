@@ -41,26 +41,26 @@ public class Assembly {
                     // Move immediate value into register
                     register[r1] = addr;
                     break;
-                case 0x02: // ADD r1, r2, addr
-                    // Add value from memory to register value
-                    register[r1] = register[r2] + memory[addr];
+                case 0x02: // ADD r1, r2, r3
+                    // Add value from register r2 to register r3
+                    register[r1] = register[r2] + register[addr];
                     break;
-                case 0x03: // SUB r1, r2, addr
-                    // Subtract value from memory from register value
-                    register[r1] = register[r2] - memory[addr];
+                case 0x03: // SUB r1, r2, r3
+                    // Subtract value in register r2 from value in register r3
+                    register[r1] = register[r2] - register[addr];
                     break;
-                case 0x04: // MUL r1, r2, addr
-                    // Multiply register value by value from memory
-                    register[r1] = register[r2] * memory[addr];
+                case 0x04: // MUL r1, r2, r3
+                    // Multiply value in register r2 with value in register r3
+                    register[r1] = register[r2] * register[addr];
                     break;
-                case 0x05: // DIV r1, r2, addr
-                    // Divide register value by value from memory
-                    register[r1] = register[r2] / memory[addr];
+                case 0x05: // DIV r1, r2, r3
+                    // Divide value in register r2 by value in register r3
+                    register[r1] = register[r2] / register[addr];
                     break;
-                case 0x06: // AND r1, r2, addr
+                case 0x06: // AND r1, r2, r3
                     register[r1] = register[r2] & register[addr];
                     break;
-                case 0x07: // OR r1, r2, addr
+                case 0x07: // OR r1, r2, r3
                     register[r1] = register[r2] | register[addr];
                     break;
                 case 0x08: // STORE r1, addr

@@ -1,33 +1,56 @@
 import GUI.Window;
+import Utils.ConfigManager;
 
 import javax.swing.*;
-import java.io.IOException;
-import java.nio.file.Files;
-import java.nio.file.Paths;
-import java.util.List;
+import java.io.File;
 
 public class Main {
-    public static void main(String[] args) {
-        SwingUtilities.invokeLater(Window::new);
+    private static ConfigManager configManager = new ConfigManager("src/data/data.json");
+    private static String userHome;
+    private static File programFolder;
+    private static File projectsFolder;
+    private static Window window = new Window();
 
-        // Path to the program.txt file
-        String filePath = "src/program.txt"; // Update this path if necessary
+    public static String getUserHome() {
+        return userHome;
+    }
 
-        try {
-            // Read all lines from the file into a List<String>
-            List<String> lines = Files.readAllLines(Paths.get(filePath));
+    public static void setUserHome(String userHome) {
+        Main.userHome = userHome;
+    }
 
-            // Convert List<String> to String[]
-            String[] program = lines.toArray(new String[0]);
+    public static void generateDefaultProgramDirectory(File programFolder, File projectsFolder) {
+        createIfExists(programFolder);
+        createIfExists(projectsFolder);
+    }
 
-            // Create an Assembly instance with appropriate size
-            Assembly asm = new Assembly(program.length);
-            asm.loadProgram(program);
-            asm.execute();
-
-        } catch (IOException e) {
-            // Handle potential IOExceptions such as file not found
-            System.err.println("Error reading the file: " + e.getMessage());
+    public static void createIfExists(File file) {
+        if (!file.exists()) {
+            boolean created = file.mkdirs(); // mkdirs() creates directories including any necessary but nonexistent parent directories
+            if (created) {
+                System.out.println("Directory created: " + file.getAbsolutePath());
+            } else {
+                System.out.println("Directory already exists or could not be created.");
+            }
+        } else {
+            System.out.println("Directory already exists: " + file.getAbsolutePath());
         }
+    }
+
+    public static void main(String[] args) {
+        // Initialize user home and directories
+        userHome = System.getProperty("user.home");
+        programFolder = new File(userHome, "Assembly Simulator");
+        projectsFolder = new File(programFolder, "Projects");
+        generateDefaultProgramDirectory(programFolder, projectsFolder);
+        configManager.setDefaultDirectory(programFolder.getAbsolutePath());
+
+        // Start the main application window
+        SwingUtilities.invokeLater(() -> {
+            window.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+            window.setSize(800, 600);
+            window.setLocationRelativeTo(null);
+            window.setVisible(true);
+        });
     }
 }
