@@ -1,3 +1,5 @@
+package MainClasses;
+
 import GUI.Window;
 import Utils.ConfigManager;
 
@@ -40,7 +42,7 @@ public class Main {
     public static void main(String[] args) {
         // Initialize user home and directories
         userHome = System.getProperty("user.home");
-        programFolder = new File(userHome, "Assembly Simulator");
+        programFolder = new File(userHome, "MainClasses.Assembly Simulator");
         projectsFolder = new File(programFolder, "Projects");
         generateDefaultProgramDirectory(programFolder, projectsFolder);
         configManager.setDefaultDirectory(programFolder.getAbsolutePath());
@@ -52,5 +54,7 @@ public class Main {
             window.setLocationRelativeTo(null);
             window.setVisible(true);
         });
+
+
     }
 }

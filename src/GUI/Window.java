@@ -7,7 +7,7 @@ import java.awt.*;
 
 public class Window extends JFrame {
     public Window() {
-        setTitle("Assembly Simulator");
+        setTitle("MainClasses.Assembly Simulator");
         setSize(1000, 600);
         setLocationRelativeTo(null);
         setExtendedState(JFrame.MAXIMIZED_BOTH);
@@ -36,7 +36,7 @@ public class Window extends JFrame {
         rightPanel.setLayout(new BorderLayout());
         rightPanel.add(editorPanel, BorderLayout.CENTER);
 
-        // Main split pane to divide left and right panels
+        // MainClasses.Main split pane to divide left and right panels
         JSplitPane mainSplitPane = new JSplitPane(JSplitPane.HORIZONTAL_SPLIT, leftPanel, rightPanel);
         mainSplitPane.setDividerLocation(250);
 
@@ -47,6 +47,6 @@ public class Window extends JFrame {
     }
 
     public void updateTitle(String title) {
-        this.setTitle("Assembly Simulator - " + title);
+        this.setTitle("MainClasses.Assembly Simulator - " + title);
     }
 }

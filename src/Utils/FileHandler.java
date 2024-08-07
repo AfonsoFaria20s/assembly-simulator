@@ -114,7 +114,7 @@ public class FileHandler {
             editorPanel.getTextEditor().setText("");
 
             // Update title to default text
-            window.updateTitle("Assembly Simulator");
+            window.updateTitle("MainClasses.Assembly Simulator");
 
         } catch (IOException ex) {
             JOptionPane.showMessageDialog(null, "Error during file close operation: " + ex.getMessage(),

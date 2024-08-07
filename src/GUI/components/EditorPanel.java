@@ -1,5 +1,8 @@
 package GUI.components;
 
+import MainClasses.Assembly;
+import Utils.FileHandler;
+
 import javax.swing.*;
 import javax.swing.border.LineBorder;
 import javax.swing.event.DocumentEvent;
@@ -7,12 +10,15 @@ import javax.swing.event.DocumentListener;
 import javax.swing.text.*;
 import java.awt.*;
 import java.awt.event.*;
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 
 public class EditorPanel extends JPanel {
     private JTextPane editorTextPane;
     private JTextArea lineNumberArea;
     private JButton executeButton;
-
+    private Assembly assembly;
 
     public EditorPanel() {
         setLayout(new BorderLayout());
@@ -68,9 +74,23 @@ public class EditorPanel extends JPanel {
     }
 
     private void executeCode() {
+        // Get the code from the editor text pane
         String code = editorTextPane.getText();
-        // TODO: Add code execution logic here
-        System.out.println("Executing code:\n" + code);
+
+        // Split the code into lines
+        String[] program = code.split("\\r?\\n");
+
+        try {
+            // Create an Assembly instance with appropriate size
+            Assembly asm = new Assembly(program.length);
+            asm.loadProgram(program);
+            asm.execute();
+
+        } catch (Exception e) {
+            // Handle exceptions such as invalid instructions
+            e.printStackTrace();
+            System.err.println("Error executing code: " + e.getMessage());
+        }
     }
 
     public JTextPane getTextEditor() {

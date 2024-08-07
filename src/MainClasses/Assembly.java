@@ -1,3 +1,5 @@
+package MainClasses;
+
 import java.util.Arrays;
 
 /**
@@ -15,7 +17,7 @@ public class Assembly {
         this.program = new int[programSize]; // Initialize program array with the specified size
     }
 
-    void loadProgram(String[] rawprogram) {
+    public void loadProgram(String[] rawprogram) {
         int length = Math.min(program.length, rawprogram.length); // Use program length to avoid out-of-bounds
         Assembler assembler = new Assembler();
         for (int i = 0; i < length; i++) {
