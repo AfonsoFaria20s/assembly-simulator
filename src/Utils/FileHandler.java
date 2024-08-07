@@ -38,6 +38,7 @@ public class FileHandler {
 
                 // Save a copy to temporary file
                 saveToTempFile();
+                configManager.addRecentFile(file.getAbsolutePath());
             } catch (IOException ex) {
                 JOptionPane.showMessageDialog(null, "Error reading the file: " + ex.getMessage(),
                         "File Read Error", JOptionPane.ERROR_MESSAGE);
@@ -75,7 +76,9 @@ public class FileHandler {
     }
 
     public void closeFile() {
-        if (file == null) return;
+        if (file == null) {
+            saveFile();
+        }
 
         try (BufferedWriter writer = new BufferedWriter(new FileWriter(file))) {
             writer.write(editorPanel.getTextEditor().getText());
