@@ -1,4 +1,4 @@
-# Simple MainClasses.Assembly Language Simulator
+# Simple Assembly Language Simulator
 
 This is a basic assembly language simulator written in Java. It supports basic arithmetic, logical, and memory operations, simulating the behavior of a simple processor.
 
@@ -56,44 +56,6 @@ This is a basic assembly language simulator written in Java. It supports basic a
     ```sh
     java MainClasses.Main
     ```
-
-## Example
-
-The following Java code demonstrates how to set up and run a program with the simulator:
-
-```java
-import MainClasses.Assembly;
-
-public class MainClasses.
-
-Main {
-   public static void main (String[]args){
-      // Path to the program.txt file
-      String filePath = "program.txt"; // Update this path if necessary
-
-      try {
-         // Read all lines from the file into a List<String>
-         List<String> lines = Files.readAllLines(Paths.get(filePath));
-
-         // Convert List<String> to String[]
-         String[] program = lines.toArray(new String[0]);
-
-         // Create an MainClasses.Assembly instance with appropriate size
-         Assembly asm = new Assembly(program.length);
-
-         // Load the program instructions into the MainClasses.Assembly instance
-         asm.loadProgram(program);
-
-         // Execute the loaded program
-         asm.execute();
-
-      } catch (IOException e) {
-         // Handle potential IOExceptions such as file not found
-         System.err.println("Error reading the file: " + e.getMessage());
-      }
-   }
-}
-```
 # Notes
 - Ensure that program.txt is located in the same directory as MainClasses.Main.java or adjust the file path accordingly.
 - The simulator uses a busy-wait loop to simulate delays; you can adjust or remove this as needed.
