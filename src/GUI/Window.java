@@ -7,7 +7,7 @@ import java.awt.*;
 
 public class Window extends JFrame {
     public Window() {
-        setTitle("MainClasses.Assembly Simulator");
+        setTitle("Assembly Simulator");
         setSize(1000, 600);
         setLocationRelativeTo(null);
         setExtendedState(JFrame.MAXIMIZED_BOTH);

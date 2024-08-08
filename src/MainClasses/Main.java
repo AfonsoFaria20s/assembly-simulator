@@ -1,9 +1,11 @@
 package MainClasses;
 
-import GUI.Window;
 import Utils.ConfigManager;
+import Utils.LoadingScreen;
+import GUI.Window;
 
 import javax.swing.*;
+import java.awt.*;
 import java.io.File;
 
 public class Main {
@@ -11,7 +13,6 @@ public class Main {
     private static String userHome;
     private static File programFolder;
     private static File projectsFolder;
-    private static Window window = new Window();
 
     public static String getUserHome() {
         return userHome;
@@ -42,19 +43,18 @@ public class Main {
     public static void main(String[] args) {
         // Initialize user home and directories
         userHome = System.getProperty("user.home");
-        programFolder = new File(userHome, "MainClasses.Assembly Simulator");
+        programFolder = new File(userHome, "Assembly Simulator");
         projectsFolder = new File(programFolder, "Projects");
         generateDefaultProgramDirectory(programFolder, projectsFolder);
         configManager.setDefaultDirectory(programFolder.getAbsolutePath());
 
         // Start the main application window
         SwingUtilities.invokeLater(() -> {
-            window.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-            window.setSize(800, 600);
-            window.setLocationRelativeTo(null);
-            window.setVisible(true);
+            LoadingScreen loadingScreen = new LoadingScreen();
+            loadingScreen.setVisible(true);
+
+            loadingScreen.dispose();
+            Window window = new Window();
         });
-
-
     }
 }
