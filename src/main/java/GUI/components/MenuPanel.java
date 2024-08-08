@@ -2,16 +2,21 @@ package GUI.components;
 
 import Utils.ConfigManager;
 import Utils.FileHandler;
+import GUI.Window;
 
 import javax.swing.*;
 import java.awt.*;
+import java.io.File;
 
 public class MenuPanel extends JPanel {
     private FileHandler fileHandler;
-    private ConfigManager configManager = new ConfigManager("src/data/data.json");
 
-    public MenuPanel(EditorPanel editorPanel, Window window) {
-        fileHandler = new FileHandler(editorPanel, (GUI.Window) window, configManager);
+    public MenuPanel(EditorPanel editorPanel, Window window, File dataFile) {
+        // Pass dataFile to ConfigManager
+        ConfigManager configManager = new ConfigManager(dataFile);
+
+        // Pass ConfigManager to FileHandler
+        fileHandler = new FileHandler(editorPanel, window, configManager, new File(configManager.getProgramFolder()));
 
         JMenuBar menuBar = new JMenuBar();
 
@@ -55,5 +60,9 @@ public class MenuPanel extends JPanel {
         // Add the menu bar to this panel
         setLayout(new BorderLayout());
         add(menuBar, BorderLayout.NORTH);
+    }
+
+    public FileHandler getFileHandler() {
+        return fileHandler;
     }
 }

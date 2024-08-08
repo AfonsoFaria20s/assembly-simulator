@@ -1,0 +1,9 @@
+<component name="ArtifactManager">
+  <artifact type="jar" name="AssemblySimulator:jar">
+    <output-path>$PROJECT_DIR$/out/artifacts/AssemblySimulator_jar</output-path>
+    <root id="archive" name="AssemblySimulator.jar">
+      <element id="module-output" name="AssemblySimulator" />
+      <element id="library" level="project" name="json-20240303" />
+    </root>
+  </artifact>
+</component>

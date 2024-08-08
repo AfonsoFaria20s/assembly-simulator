@@ -1,4 +1,0 @@
-mov eax #10
-mov ebx #11
-add ecx eax ebx
-str eax 0x00

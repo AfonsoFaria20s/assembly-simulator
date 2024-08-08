@@ -1,16 +1,20 @@
 package GUI;
 
-import GUI.components.*;
-import org.json.JSONArray;
-import org.json.JSONObject;
+import GUI.components.EditorPanel;
+import GUI.components.FlagsPanel;
+import GUI.components.MenuPanel;
+import GUI.components.MemoryPanel;
+import GUI.components.RegistersPanel;
 
 import javax.swing.*;
 import java.awt.*;
-import java.io.*;
+import java.io.File;
+import java.io.IOException;
 
 public class Window extends JFrame {
-    private final RegistersPanel registersPanel = new RegistersPanel();
-    public Window() throws IOException {
+    private MenuPanel menuPanel;
+
+    public Window(File dataFile) throws IOException {
         setTitle("Assembly Simulator");
         setSize(1000, 600);
         setLocationRelativeTo(null);
@@ -22,14 +26,15 @@ public class Window extends JFrame {
         RegistersPanel registersPanel = new RegistersPanel();
         MemoryPanel memoryPanel = new MemoryPanel();
         FlagsPanel flagsPanel = new FlagsPanel();
-        EditorPanel editorPanel = new EditorPanel(registersPanel, memoryPanel); // Pass RegistersPanel to EditorPanel
-        MenuPanel menuPanel = new MenuPanel(editorPanel, this);
+        EditorPanel editorPanel = new EditorPanel(registersPanel, memoryPanel);
+
+        // Pass the dataFile to the MenuPanel
+        menuPanel = new MenuPanel(editorPanel, this, dataFile);
 
         // Left panel (registers and memory)
         JSplitPane leftSplitPane = new JSplitPane(JSplitPane.VERTICAL_SPLIT, registersPanel, memoryPanel);
         leftSplitPane.setDividerLocation(200);
 
-        // Left side with flags at the bottom
         JPanel leftPanel = new JPanel();
         leftPanel.setLayout(new BorderLayout());
         leftPanel.add(leftSplitPane, BorderLayout.CENTER);
@@ -48,8 +53,10 @@ public class Window extends JFrame {
         add(menuPanel, BorderLayout.NORTH);
         // Add main split pane to the frame
         add(mainSplitPane, BorderLayout.CENTER);
+    }
 
-        File file = new File("src/data/data.json");
+    public void openLastFile(String lastOpenFilePath) {
+        menuPanel.getFileHandler().openFile(new File(lastOpenFilePath));
     }
 
     public void updateTitle(String title) {

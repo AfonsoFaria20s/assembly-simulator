@@ -13,41 +13,53 @@ public class FileHandler {
     private EditorPanel editorPanel;
     private Window window;
     private ConfigManager configManager;
+    private File tempFile; // New field for the temporary file
 
-    public FileHandler(EditorPanel editorPanel, Window window, ConfigManager configManager) {
+    public FileHandler(EditorPanel editorPanel, Window window, ConfigManager configManager, File projectFolder) {
         this.editorPanel = editorPanel;
         this.window = window;
         this.configManager = configManager;
-        fileChooser = new JFileChooser(configManager.getDefaultDirectory());
+        this.fileChooser = new JFileChooser(configManager.getProgramFolder());
+        this.tempFile = new File(projectFolder, "temp.asm"); // Initialize tempFile with the path to temp.asm
     }
 
     public void openFile() {
         int returnValue = fileChooser.showOpenDialog(null);
         if (returnValue == JFileChooser.APPROVE_OPTION) {
             file = fileChooser.getSelectedFile();
-            try (BufferedReader reader = new BufferedReader(new FileReader(file))) {
-                StringBuilder content = new StringBuilder();
-                String line;
-                while ((line = reader.readLine()) != null) {
-                    content.append(line).append("\n");
-                }
-                editorPanel.getTextEditor().setText(content.toString());
+            loadFile(file);
+        }
+    }
 
-                // Update title to current directory/file
-                window.updateTitle(file.getAbsolutePath());
+    public void openFile(File file) {
+        loadFile(file);
+    }
 
-                // Save a copy to temporary file
-                saveToTempFile();
-                configManager.addRecentFile(file.getAbsolutePath());
-            } catch (IOException ex) {
-                JOptionPane.showMessageDialog(null, "Error reading the file: " + ex.getMessage(),
-                        "File Read Error", JOptionPane.ERROR_MESSAGE);
+    private void loadFile(File file) {
+        try (BufferedReader reader = new BufferedReader(new FileReader(file))) {
+            StringBuilder content = new StringBuilder();
+            String line;
+            while ((line = reader.readLine()) != null) {
+                content.append(line).append("\n");
             }
+            editorPanel.getTextEditor().setText(content.toString());
+
+            // Update title to current directory/file
+            window.updateTitle(file.getAbsolutePath());
+
+            // Save a copy to temporary file
+            saveToTempFile();
+
+            // Update the lastOpen field in config
+            configManager.setLastOpenFilePath(file.getAbsolutePath());
+        } catch (IOException ex) {
+            JOptionPane.showMessageDialog(null, "Error reading the file: " + ex.getMessage(),
+                    "File Read Error", JOptionPane.ERROR_MESSAGE);
         }
     }
 
     private void saveToTempFile() {
-        try (BufferedWriter writer = new BufferedWriter(new FileWriter("src/Temporary/temp.txt"))) {
+        try (BufferedWriter writer = new BufferedWriter(new FileWriter(tempFile))) {
             writer.write(editorPanel.getTextEditor().getText());
         } catch (IOException ex) {
             JOptionPane.showMessageDialog(null, "Error saving to temporary file: " + ex.getMessage(),
@@ -88,7 +100,7 @@ public class FileHandler {
         }
 
         try (BufferedReader mainFileReader = new BufferedReader(new FileReader(file));
-             BufferedReader tempFileReader = new BufferedReader(new FileReader("src/Temporary/temp.txt"))) {
+             BufferedReader tempFileReader = new BufferedReader(new FileReader(tempFile))) {
 
             StringBuilder mainContent = new StringBuilder();
             String line;
@@ -114,7 +126,7 @@ public class FileHandler {
             editorPanel.getTextEditor().setText("");
 
             // Update title to default text
-            window.updateTitle("MainClasses.Assembly Simulator");
+            window.updateTitle("Assembly Simulator");
 
         } catch (IOException ex) {
             JOptionPane.showMessageDialog(null, "Error during file close operation: " + ex.getMessage(),
