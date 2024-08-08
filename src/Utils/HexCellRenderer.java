@@ -5,17 +5,16 @@ import javax.swing.table.DefaultTableCellRenderer;
 import java.awt.*;
 
 public class HexCellRenderer extends DefaultTableCellRenderer {
+    private int times;
+    public HexCellRenderer(int times) {
+        this.times = times;
+    }
     @Override
     public Component getTableCellRendererComponent(JTable table, Object value, boolean isSelected, boolean hasFocus, int row, int column) {
-        JLabel label = (JLabel) super.getTableCellRendererComponent(table, value, isSelected, hasFocus, row, column);
-
-        // Check if the value is a String
-        if (value instanceof String) {
-            label.setText((String) value);
-        } else if (value instanceof Number) {
-            label.setText(String.format("0x%08X", ((Number) value).intValue()));
+        Component cell = super.getTableCellRendererComponent(table, value, isSelected, hasFocus, row, column);
+        if (value instanceof Integer) {
+            setText(String.format("0x%0"+times+"X", (Integer) value));
         }
-
-        return label;
+        return cell;
     }
 }

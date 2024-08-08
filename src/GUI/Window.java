@@ -1,12 +1,16 @@
 package GUI;
 
 import GUI.components.*;
+import org.json.JSONArray;
+import org.json.JSONObject;
 
 import javax.swing.*;
 import java.awt.*;
+import java.io.*;
 
 public class Window extends JFrame {
-    public Window() {
+    private final RegistersPanel registersPanel = new RegistersPanel();
+    public Window() throws IOException {
         setTitle("Assembly Simulator");
         setSize(1000, 600);
         setLocationRelativeTo(null);
@@ -18,7 +22,7 @@ public class Window extends JFrame {
         RegistersPanel registersPanel = new RegistersPanel();
         MemoryPanel memoryPanel = new MemoryPanel();
         FlagsPanel flagsPanel = new FlagsPanel();
-        EditorPanel editorPanel = new EditorPanel();
+        EditorPanel editorPanel = new EditorPanel(registersPanel, memoryPanel); // Pass RegistersPanel to EditorPanel
         MenuPanel menuPanel = new MenuPanel(editorPanel, this);
 
         // Left panel (registers and memory)
@@ -36,7 +40,7 @@ public class Window extends JFrame {
         rightPanel.setLayout(new BorderLayout());
         rightPanel.add(editorPanel, BorderLayout.CENTER);
 
-        // MainClasses.Main split pane to divide left and right panels
+        // Main split pane to divide left and right panels
         JSplitPane mainSplitPane = new JSplitPane(JSplitPane.HORIZONTAL_SPLIT, leftPanel, rightPanel);
         mainSplitPane.setDividerLocation(250);
 
@@ -44,9 +48,11 @@ public class Window extends JFrame {
         add(menuPanel, BorderLayout.NORTH);
         // Add main split pane to the frame
         add(mainSplitPane, BorderLayout.CENTER);
+
+        File file = new File("src/data/data.json");
     }
 
     public void updateTitle(String title) {
-        this.setTitle("MainClasses.Assembly Simulator - " + title);
+        this.setTitle("Assembly Simulator - " + title);
     }
 }

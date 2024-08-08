@@ -7,6 +7,7 @@ import GUI.Window;
 import javax.swing.*;
 import java.awt.*;
 import java.io.File;
+import java.io.IOException;
 
 public class Main {
     private static ConfigManager configManager = new ConfigManager("src/data/data.json");
