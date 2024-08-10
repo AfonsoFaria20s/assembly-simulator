@@ -1,10 +1,10 @@
 package GUI;
 
-import GUI.components.EditorPanel;
-import GUI.components.FlagsPanel;
-import GUI.components.MenuPanel;
-import GUI.components.MemoryPanel;
-import GUI.components.RegistersPanel;
+import GUI.windowComponents.EditorPanel;
+import GUI.windowComponents.FlagsPanel;
+import GUI.windowComponents.MenuPanel;
+import GUI.windowComponents.MemoryPanel;
+import GUI.windowComponents.RegistersPanel;
 
 import javax.swing.*;
 import java.awt.*;

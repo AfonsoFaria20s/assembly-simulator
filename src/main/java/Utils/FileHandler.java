@@ -1,7 +1,7 @@
 package Utils;
 
 import GUI.Window;
-import GUI.components.EditorPanel;
+import GUI.windowComponents.EditorPanel;
 
 import javax.swing.*;
 import java.io.*;

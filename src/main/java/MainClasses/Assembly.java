@@ -1,7 +1,7 @@
 package MainClasses;
 
-import GUI.components.MemoryPanel;
-import GUI.components.RegistersPanel;
+import GUI.windowComponents.MemoryPanel;
+import GUI.windowComponents.RegistersPanel;
 
 import javax.swing.*;
 import java.awt.event.ActionEvent;

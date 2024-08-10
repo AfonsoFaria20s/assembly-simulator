@@ -1,5 +1,6 @@
-package GUI.components;
+package GUI.windowComponents;
 
+import GUI.Settings;
 import Utils.ConfigManager;
 import Utils.FileHandler;
 import GUI.Window;
@@ -51,6 +52,7 @@ public class MenuPanel extends JPanel {
         openItem.addActionListener(e -> fileHandler.openFile());
         saveItem.addActionListener(e -> fileHandler.saveFile());
         closeItem.addActionListener(e -> fileHandler.closeFile());
+        settings.addActionListener(e -> new Settings().setVisible(true));
         exitItem.addActionListener(e -> System.exit(0));
         aboutItem.addActionListener(e -> JOptionPane.showMessageDialog(null,
                 "CPU Simulator v1.0\nWith custom assembly language.",

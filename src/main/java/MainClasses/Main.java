@@ -40,15 +40,22 @@ public class Main {
         if (!dataFile.exists()) {
             try (FileWriter writer = new FileWriter(dataFile)) {
                 String defaultJsonContent = "{\n" +
-                        "    \"lastOpen\": [\"\"],\n" +
+                        "    \"lastOpen\": [\"C:\\\\Users\\\\Utilizador\\\\Assembly Simulator\\\\Projects\\\\lol.asm\"],\n" +
                         "    \"settings\": {\n" +
                         "        \"theme\": \"light\",\n" +
-                        "        \"fontSize\": 14\n" +
+                        "        \"fontSize\": 14,\n" +
+                        "        \"autoSaveInterval\": 5\n" +
                         "    },\n" +
                         "    \"editorPreferences\": {\n" +
-                        "        \"numberType\": \"hex\"\n" +
+                        "        \"numberType\": \"hex\",\n" +
+                        "        \"lineWrapping\": true,\n" +
+                        "        \"highlightCurrentLine\": true\n" +
                         "    },\n" +
-                        "    \"defaultDirectory\": \"\"" +
+                        "    \"defaultDirectory\": \"\",\n" +
+                        "    \"shortcuts\": {\n" +
+                        "        \"openFile\": \"Ctrl+O\",\n" +
+                        "        \"saveFile\": \"Ctrl+S\"\n" +
+                        "    }\n" +
                         "}";
                 writer.write(defaultJsonContent);
                 System.out.println("data.json created with default content: " + dataFile.getAbsolutePath());
