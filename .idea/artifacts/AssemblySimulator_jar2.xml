@@ -1,9 +1,0 @@
-<component name="ArtifactManager">
-  <artifact type="jar" name="AssemblySimulator:jar2">
-    <output-path>$PROJECT_DIR$/out/artifacts/AssemblySimulator_jar2</output-path>
-    <root id="archive" name="AssemblySimulator.jar">
-      <element id="module-output" name="AssemblySimulator" />
-      <element id="extracted-dir" path="$MAVEN_REPOSITORY$/org/json/json/20211205/json-20211205.jar" path-in-jar="/" />
-    </root>
-  </artifact>
-</component>
