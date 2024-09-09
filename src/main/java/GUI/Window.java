@@ -5,6 +5,7 @@ import GUI.windowComponents.FlagsPanel;
 import GUI.windowComponents.MenuPanel;
 import GUI.windowComponents.MemoryPanel;
 import GUI.windowComponents.RegistersPanel;
+import com.formdev.flatlaf.FlatLightLaf;
 
 import javax.swing.*;
 import java.awt.*;
@@ -21,6 +22,13 @@ public class Window extends JFrame {
         setExtendedState(JFrame.MAXIMIZED_BOTH);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setVisible(true);
+
+        // UIManager.setLookAndFeel();
+        try {
+            UIManager.setLookAndFeel( new FlatLightLaf() );
+        } catch( Exception ex ) {
+            System.err.println( "Failed to initialize LaF" );
+        }
 
         // Create panels for registers, memory, flags, editor, and menu
         RegistersPanel registersPanel = new RegistersPanel();

@@ -28,7 +28,13 @@
             <version>20211205</version>
         </dependency>
 
-        <!-- Add other dependencies here -->
+        <!-- Flatlaf Look and Feel -->
+        <dependency>
+            <groupId>com.formdev</groupId>
+            <artifactId>flatlaf</artifactId>
+            <version>3.5.1</version>
+        </dependency>
+
     </dependencies>
 
     <!-- Build configuration -->
