@@ -122,6 +122,8 @@ public class FileHandler {
                 }
             }
 
+            configManager.setLastOpenFilePath("");
+
             file = null;
             editorPanel.getTextEditor().setText("");
 
