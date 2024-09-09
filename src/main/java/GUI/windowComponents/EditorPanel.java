@@ -35,7 +35,9 @@ public class EditorPanel extends JPanel {
 
         assembly = new Assembly(editorTextPane.getDocument().getDefaultRootElement().getElementCount(), registersPanel, memoryPanel);
 
-        executeButton.addActionListener(e -> executeCode());
+        executeButton.addActionListener(event -> {
+            executeCode();
+        });
 
         editorTextPane.getDocument().addDocumentListener(new DocumentListener() {
             @Override
@@ -83,7 +85,13 @@ public class EditorPanel extends JPanel {
             assembly.execute();
         } catch (Exception e) {
             e.printStackTrace();
-            System.err.println("Error executing code: " + e.getMessage());
+            JFrame parentFrame = (JFrame) SwingUtilities.getWindowAncestor(this);
+            JOptionPane.showMessageDialog(
+                    parentFrame,
+                    e.getMessage()+"\n"+e.getClass().getName(),
+                    "Error",
+                    JOptionPane.WARNING_MESSAGE
+            );
         }
     }
 
