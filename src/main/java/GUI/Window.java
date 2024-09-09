@@ -22,6 +22,8 @@ public class Window extends JFrame {
         setExtendedState(JFrame.MAXIMIZED_BOTH);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setVisible(true);
+        ImageIcon image = new ImageIcon("src/main/resources/logo.png");
+        setIconImage(image.getImage());
 
         // UIManager.setLookAndFeel();
         try {

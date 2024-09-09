@@ -1,6 +1,8 @@
-# Simple Assembly Language Simulator
+# FonSim
 
-This is a basic assembly language simulator written in Java. It supports basic arithmetic, logical, and memory operations, simulating the behavior of a simple processor.
+## Simple Assembly Language Simulator
+
+FonSim is a basic assembly language simulator written in Java. It simulates the behavior of a simple processor with features including arithmetic, logical, and memory operations.
 
 ## Features
 
@@ -31,32 +33,25 @@ This is a basic assembly language simulator written in Java. It supports basic a
 
 ## Usage
 
-1. Clone the repository:
-    ```sh
-    git clone https://github.com/AfonsoFaria20s/assembly-simulator.git
-    cd assembly-simulator
-    ```
+1. **Download the Executable:**
+   - Download the `.exe` file from the [releases page](URL_TO_RELEASES_PAGE).
 
-2. Compile the Java files:
-    ```sh
-    javac MainClasses.Assembly.java MainClasses.Main.java
-    ```
+2. **Create a Program File:**
+   - Create a file (for example) `myProgram.txt` with your instructions, each on a new line. For example:
+     ```
+     MOV R1, 10
+     MOV R2, 5
+     ADD R1, R2, 0
+     STORE R1, 0
+     LOAD R1, 0
+     JMP 0
+     ```
 
-3. Create a file named `program.txt` with your instructions, each on a new line. For example:
-    ```
-    MOV R1, 10
-    MOV R2, 5
-    ADD R1, R2, 0
-    STORE R1, 0
-    LOAD R1, 0
-    JMP 0
-    ```
+3. **Run the Simulator:**
+   - Double-click the `.exe` file to start the simulator.
 
-4. Run the simulator with your program:
-    ```sh
-    java MainClasses.Main
-    ```
-# Notes
-- Ensure that program.txt is located in the same directory as MainClasses.Main.java or adjust the file path accordingly.
+## Notes
+
 - The simulator uses a busy-wait loop to simulate delays; you can adjust or remove this as needed.
 - Feel free to modify and extend the simulator according to your needs. Happy coding!
+
