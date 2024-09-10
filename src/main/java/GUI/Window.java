@@ -1,22 +1,21 @@
 package GUI;
 
-import GUI.windowComponents.EditorPanel;
-import GUI.windowComponents.FlagsPanel;
-import GUI.windowComponents.MenuPanel;
-import GUI.windowComponents.MemoryPanel;
-import GUI.windowComponents.RegistersPanel;
+import GUI.windowComponents.*;
 import com.formdev.flatlaf.FlatDarkLaf;
 import com.formdev.flatlaf.FlatLightLaf;
-
 import javax.swing.*;
 import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;
 import java.io.File;
 import java.io.IOException;
 
 public class Window extends JFrame {
     private MenuPanel menuPanel;
 
-    public Window(File dataFile) throws IOException {
+    public Window(File dataFile) throws IOException, UnsupportedLookAndFeelException {
         setTitle("Assembly Simulator");
         setSize(1000, 600);
         setLocationRelativeTo(null);
@@ -26,12 +25,8 @@ public class Window extends JFrame {
         ImageIcon image = new ImageIcon("src/main/resources/logo.png");
         setIconImage(image.getImage());
 
-        // UIManager.setLookAndFeel();
-        try {
-            UIManager.setLookAndFeel( new FlatDarkLaf() );
-        } catch( Exception ex ) {
-            System.err.println( "Failed to initialize LaF" );
-        }
+        // Default theme
+        updateTheme("Dark");
 
         // Create panels for registers, memory, flags, editor, and menu
         RegistersPanel registersPanel = new RegistersPanel();
@@ -64,6 +59,13 @@ public class Window extends JFrame {
         add(menuPanel, BorderLayout.NORTH);
         // Add main split pane to the frame
         add(mainSplitPane, BorderLayout.CENTER);
+
+        addWindowListener(new WindowAdapter() {
+            @Override
+            public void windowClosing(WindowEvent e) {
+                menuPanel.getFileHandler().saveFile();
+            }
+        });
     }
 
     public void openLastFile(String lastOpenFilePath) {
@@ -72,5 +74,21 @@ public class Window extends JFrame {
 
     public void updateTitle(String title) {
         this.setTitle("Assembly Simulator - " + title);
+    }
+
+    public void updateTheme(String theme) throws UnsupportedLookAndFeelException {
+        // Update the Look and Feel
+        if(theme.equalsIgnoreCase("dark")) {
+            UIManager.setLookAndFeel(new FlatDarkLaf());
+        } else if(theme.equalsIgnoreCase("light")) {
+            UIManager.setLookAndFeel(new FlatLightLaf());
+        }
+
+        // Rebuild the UI to reflect the new Look and Feel
+        SwingUtilities.updateComponentTreeUI(this);
+
+        // Revalidate and repaint the frame
+        this.revalidate();
+        this.repaint();
     }
 }

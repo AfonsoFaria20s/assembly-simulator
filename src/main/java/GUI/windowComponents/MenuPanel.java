@@ -14,8 +14,10 @@ import java.util.TimerTask;
 
 public class MenuPanel extends JPanel {
     private FileHandler fileHandler;
+    private Settings settings;
 
     public MenuPanel(EditorPanel editorPanel, Window window, File dataFile) {
+        this.settings = new Settings(window);
         // Pass dataFile to ConfigManager
         ConfigManager configManager = new ConfigManager(dataFile);
 
@@ -30,7 +32,7 @@ public class MenuPanel extends JPanel {
         JMenuItem saveItem = new JMenuItem("Save");
         JMenuItem saveAsItem = new JMenuItem("Save As");
         JMenuItem closeItem = new JMenuItem("Close");
-        JMenuItem settings = new JMenuItem("Settings");
+        JMenuItem settingsItem = new JMenuItem("Settings");
         JMenuItem exitItem = new JMenuItem("Exit");
 
         // Add menu items to File menu
@@ -38,8 +40,8 @@ public class MenuPanel extends JPanel {
         fileMenu.add(saveItem);
         fileMenu.add(saveAsItem);
         fileMenu.add(closeItem);
-        fileMenu.add(settings);
         fileMenu.addSeparator();
+        fileMenu.add(settingsItem);
         fileMenu.add(exitItem);
         // Add File menu to menu bar
         menuBar.add(fileMenu);
@@ -65,7 +67,7 @@ public class MenuPanel extends JPanel {
         saveItem.addActionListener(e -> fileHandler.saveFile());
         saveAsItem.addActionListener(e -> fileHandler.saveAsFile());
         closeItem.addActionListener(e -> fileHandler.closeFile());
-        settings.addActionListener(e -> new Settings().setVisible(true));
+        settingsItem.addActionListener(e -> settings.setVisible(true));
         exitItem.addActionListener(e -> System.exit(0));
 
         // Create Help menu
@@ -78,7 +80,7 @@ public class MenuPanel extends JPanel {
         menuBar.add(helpMenu);
 
         aboutItem.addActionListener(e -> JOptionPane.showMessageDialog(null,
-                "CPU Simulator v1.0\nWith custom assembly language.",
+                "FonSim v1.1.0\nCustom Assembly Simulator.",
                 "About",
                 JOptionPane.INFORMATION_MESSAGE));
 

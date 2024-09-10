@@ -3,11 +3,13 @@ package MainClasses;
 import GUI.Window;
 import Utils.ConfigManager;
 
+import javax.swing.*;
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
 
 public class Main {
+    private static ConfigManager configManager;
     public static void generateDefaultProgramDirectory(File programFolder, File projectsFolder, File dataFile, File tempFile) throws IOException {
         createIfExists(programFolder, true);
         createIfExists(projectsFolder, true);
@@ -83,7 +85,7 @@ public class Main {
             Window window = new Window(dataFile);
 
             // Load the last open file (if any)
-            ConfigManager configManager = new ConfigManager(dataFile);
+            configManager = new ConfigManager(dataFile);
             String lastOpenFilePath = configManager.getLastOpenFilePath();
             if (lastOpenFilePath != null && !lastOpenFilePath.isEmpty()) {
                 window.openLastFile(lastOpenFilePath);
@@ -92,7 +94,7 @@ public class Main {
             window.repaint();
             window.revalidate();
 
-        } catch (IOException e) {
+        } catch (IOException | UnsupportedLookAndFeelException e) {
             e.printStackTrace();
             System.exit(1); // Exit the program if the window fails to open
         }

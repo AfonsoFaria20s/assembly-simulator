@@ -2,8 +2,11 @@ package GUI.settingsComponents;
 
 import javax.swing.*;
 import java.awt.*;
+import java.util.Objects;
 
 public class ThemeSettingsPanel extends JPanel {
+
+    private JComboBox<String> themeComboBox = new JComboBox<>(new String[]{"Light", "Dark"});
 
     public ThemeSettingsPanel() {
         setLayout(new GridBagLayout());
@@ -15,7 +18,7 @@ public class ThemeSettingsPanel extends JPanel {
 
         // Create components for theme settings
         JLabel themeLabel = new JLabel("Theme:");
-        JComboBox<String> themeComboBox = new JComboBox<>(new String[]{"Light", "Dark"});
+        themeComboBox = new JComboBox<>(new String[]{"Dark", "Light"});
         JLabel fontSizeLabel = new JLabel("Font Size:");
         JSpinner fontSizeSpinner = new JSpinner(new SpinnerNumberModel(14, 8, 72, 1));
 
@@ -33,5 +36,8 @@ public class ThemeSettingsPanel extends JPanel {
 
         gbc.gridx = 1;
         add(fontSizeSpinner, gbc);
+    }
+    public String getTheme() {
+        return Objects.requireNonNull(themeComboBox.getSelectedItem()).toString();
     }
 }
