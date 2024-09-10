@@ -35,6 +35,7 @@ FonSim is a basic assembly language simulator written in Java. It simulates the 
 
 1. **Download the Executable:**
    - Download the `.exe` file from the [releases page](https://github.com/AfonsoFaria20s/assembly-simulator/releases).
+   - Make sure that you have latest version of JRE installed.
 
 2. **Create a Program File:**
    - Create a file (for example) `myProgram.txt` with your instructions, each on a new line. For example:
