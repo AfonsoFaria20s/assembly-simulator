@@ -7,7 +7,10 @@ import GUI.Window;
 
 import javax.swing.*;
 import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.io.File;
+import java.util.TimerTask;
 
 public class MenuPanel extends JPanel {
     private FileHandler fileHandler;
@@ -41,6 +44,30 @@ public class MenuPanel extends JPanel {
         // Add File menu to menu bar
         menuBar.add(fileMenu);
 
+        JMenu runMenu = new JMenu("Run");
+        JMenuItem executeFile = new JMenuItem("Execute");
+        JMenuItem pauseExecution = new JMenuItem("Pause");
+        JMenuItem resumeExecution = new JMenuItem("Resume");
+        JMenuItem stopExecution = new JMenuItem("Stop");
+        JSeparator separator = new JSeparator();
+        JMenuItem resetExecution = new JMenuItem("Reset values");
+
+        runMenu.add(executeFile);
+        runMenu.add(pauseExecution);
+        runMenu.add(resumeExecution);
+        runMenu.add(stopExecution);
+        runMenu.add(separator);
+        runMenu.add(resetExecution);
+        menuBar.add(runMenu);
+
+        // Add action listeners
+        openItem.addActionListener(e -> fileHandler.openFile());
+        saveItem.addActionListener(e -> fileHandler.saveFile());
+        saveAsItem.addActionListener(e -> fileHandler.saveAsFile());
+        closeItem.addActionListener(e -> fileHandler.closeFile());
+        settings.addActionListener(e -> new Settings().setVisible(true));
+        exitItem.addActionListener(e -> System.exit(0));
+
         // Create Help menu
         JMenu helpMenu = new JMenu("Help");
         JMenuItem aboutItem = new JMenuItem("About");
@@ -50,17 +77,16 @@ public class MenuPanel extends JPanel {
         // Add Help menu to menu bar
         menuBar.add(helpMenu);
 
-        // Add action listeners
-        openItem.addActionListener(e -> fileHandler.openFile());
-        saveItem.addActionListener(e -> fileHandler.saveFile());
-        saveAsItem.addActionListener(e -> fileHandler.saveAsFile());
-        closeItem.addActionListener(e -> fileHandler.closeFile());
-        settings.addActionListener(e -> new Settings().setVisible(true));
-        exitItem.addActionListener(e -> System.exit(0));
         aboutItem.addActionListener(e -> JOptionPane.showMessageDialog(null,
                 "CPU Simulator v1.0\nWith custom assembly language.",
                 "About",
                 JOptionPane.INFORMATION_MESSAGE));
+
+        executeFile.addActionListener( e -> editorPanel.executeCode());
+        pauseExecution.addActionListener(e -> editorPanel.pauseCode());
+        resumeExecution.addActionListener(e -> editorPanel.resumeCode());
+        stopExecution.addActionListener(e -> editorPanel.stopCode());
+        resetExecution.addActionListener(e -> editorPanel.resetValues());
 
         // Add the menu bar to this panel
         setLayout(new BorderLayout());

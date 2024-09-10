@@ -153,4 +153,7 @@ public class FileHandler {
                     "File Close Error", JOptionPane.ERROR_MESSAGE);
         }
     }
+    public String getFileName() {
+        return file.getName();
+    }
 }

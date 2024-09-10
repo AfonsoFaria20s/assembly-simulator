@@ -1,6 +1,7 @@
 package GUI.windowComponents;
 
 import MainClasses.Assembly;
+import Utils.FileHandler;
 
 import javax.swing.*;
 import javax.swing.border.LineBorder;
@@ -11,10 +12,11 @@ import java.awt.*;
 public class EditorPanel extends JPanel {
     private JTextPane editorTextPane;
     private JTextArea lineNumberArea;
-    private JButton executeButton;
+    // private JButton executeButton;
     private Assembly assembly;
     private RegistersPanel registersPanel;
     private MemoryPanel memoryPanel;
+    private FileHandler fileHandler;
 
     public EditorPanel(RegistersPanel registersPanel, MemoryPanel memoryPanel) {
         this.registersPanel = registersPanel;
@@ -28,16 +30,16 @@ public class EditorPanel extends JPanel {
         JScrollPane scrollPane = new JScrollPane(editorTextPane);
         scrollPane.setRowHeaderView(createLineNumberArea());
 
-        executeButton = new JButton("Execute");
+        //executeButton = new JButton("Execute");
 
         add(scrollPane, BorderLayout.CENTER);
-        add(executeButton, BorderLayout.SOUTH);
+        //add(executeButton, BorderLayout.SOUTH);
 
         assembly = new Assembly(editorTextPane.getDocument().getDefaultRootElement().getElementCount(), registersPanel, memoryPanel);
 
-        executeButton.addActionListener(event -> {
+        /*executeButton.addActionListener(event -> {
             executeCode();
-        });
+        });*/
 
         editorTextPane.getDocument().addDocumentListener(new DocumentListener() {
             @Override
@@ -75,7 +77,7 @@ public class EditorPanel extends JPanel {
         lineNumberArea.setText(lineNumbers.toString());
     }
 
-    private void executeCode() {
+    public void executeCode() {
         String code = editorTextPane.getText();
         String[] program = code.split("\\r?\\n");
 
@@ -93,6 +95,24 @@ public class EditorPanel extends JPanel {
                     JOptionPane.WARNING_MESSAGE
             );
         }
+    }
+
+    public void pauseCode() {
+        assembly.getTimer().stop();
+    }
+
+    public void resumeCode() {
+        assembly.getTimer().start();
+    }
+
+    public void stopCode() {
+        assembly.getTimer().stop();
+        assembly.setPc(0);
+        assembly.reset();
+    }
+
+    public void resetValues() {
+        assembly.reset();
     }
 
     public JTextPane getTextEditor() {

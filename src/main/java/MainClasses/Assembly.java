@@ -6,10 +6,12 @@ import GUI.windowComponents.RegistersPanel;
 import javax.swing.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.util.Arrays;
 
 public class Assembly {
     private int[] register = new int[8]; // Array of registers (8 registers)
     private int[] memory = new int[256]; // Array of memory (256 bytes)
+
     private int pc = 0; // Program Counter
     private int[] program; // The program to be executed
     private RegistersPanel registersPanel;
@@ -128,5 +130,48 @@ public class Assembly {
         // Create a timer that calls the taskPerIteration every 'delay' milliseconds
         timer = new Timer(delay, taskPerIteration);
         timer.start();
+    }
+
+    public void reset() {
+        // Reset memory and registers to 0
+        Arrays.fill(memory, 0);
+        Arrays.fill(register, 0);
+
+        // Reset PC if needed
+        pc = 0;
+
+        // Optionally update the UI
+        SwingUtilities.invokeLater(() -> {
+            registersPanel.getRegistersTable().updateRegisterValues(register);
+            memoryPanel.updateMemoryValues(memory);
+        });
+    }
+
+    public Timer getTimer() {
+        return this.timer;
+    }
+
+    public int[] getRegister() {
+        return register;
+    }
+
+    public void setRegister(int[] register) {
+        this.register = register;
+    }
+
+    public int[] getMemory() {
+        return memory;
+    }
+
+    public void setMemory(int[] memory) {
+        this.memory = memory;
+    }
+
+    public int getPc() {
+        return pc;
+    }
+
+    public void setPc(int pc) {
+        this.pc = pc;
     }
 }
