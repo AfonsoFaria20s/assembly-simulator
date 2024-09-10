@@ -68,6 +68,7 @@ public class FileHandler {
     }
 
     public void saveFile() {
+        // Check if file doesn't exist
         if (file == null) {
             int returnValue = fileChooser.showSaveDialog(null);
             if (returnValue == JFileChooser.APPROVE_OPTION) {
@@ -79,6 +80,23 @@ public class FileHandler {
         try (BufferedWriter writer = new BufferedWriter(new FileWriter(file))) {
             writer.write(editorPanel.getTextEditor().getText());
             saveToTempFile(); // Update the temp file after saving
+            // Update title to current directory/file
+            window.updateTitle(file.getAbsolutePath());
+        } catch (IOException ex) {
+            JOptionPane.showMessageDialog(null, "Error saving the file: " + ex.getMessage(),
+                    "File Save Error", JOptionPane.ERROR_MESSAGE);
+        }
+    }
+
+    public void saveAsFile() {
+        int returnValue = fileChooser.showSaveDialog(null);
+        if (returnValue == JFileChooser.APPROVE_OPTION) {
+            file = fileChooser.getSelectedFile();
+        } else {
+            return; // Save operation canceled by the user
+        }
+        try (BufferedWriter writer = new BufferedWriter(new FileWriter(file))) {
+            writer.write(editorPanel.getTextEditor().getText());
             // Update title to current directory/file
             window.updateTitle(file.getAbsolutePath());
         } catch (IOException ex) {

@@ -25,6 +25,7 @@ public class MenuPanel extends JPanel {
         JMenu fileMenu = new JMenu("File");
         JMenuItem openItem = new JMenuItem("Open");
         JMenuItem saveItem = new JMenuItem("Save");
+        JMenuItem saveAsItem = new JMenuItem("Save As");
         JMenuItem closeItem = new JMenuItem("Close");
         JMenuItem settings = new JMenuItem("Settings");
         JMenuItem exitItem = new JMenuItem("Exit");
@@ -32,6 +33,7 @@ public class MenuPanel extends JPanel {
         // Add menu items to File menu
         fileMenu.add(openItem);
         fileMenu.add(saveItem);
+        fileMenu.add(saveAsItem);
         fileMenu.add(closeItem);
         fileMenu.add(settings);
         fileMenu.addSeparator();
@@ -51,6 +53,7 @@ public class MenuPanel extends JPanel {
         // Add action listeners
         openItem.addActionListener(e -> fileHandler.openFile());
         saveItem.addActionListener(e -> fileHandler.saveFile());
+        saveAsItem.addActionListener(e -> fileHandler.saveAsFile());
         closeItem.addActionListener(e -> fileHandler.closeFile());
         settings.addActionListener(e -> new Settings().setVisible(true));
         exitItem.addActionListener(e -> System.exit(0));

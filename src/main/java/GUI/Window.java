@@ -5,6 +5,7 @@ import GUI.windowComponents.FlagsPanel;
 import GUI.windowComponents.MenuPanel;
 import GUI.windowComponents.MemoryPanel;
 import GUI.windowComponents.RegistersPanel;
+import com.formdev.flatlaf.FlatDarkLaf;
 import com.formdev.flatlaf.FlatLightLaf;
 
 import javax.swing.*;
@@ -27,7 +28,7 @@ public class Window extends JFrame {
 
         // UIManager.setLookAndFeel();
         try {
-            UIManager.setLookAndFeel( new FlatLightLaf() );
+            UIManager.setLookAndFeel( new FlatDarkLaf() );
         } catch( Exception ex ) {
             System.err.println( "Failed to initialize LaF" );
         }

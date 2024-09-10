@@ -25,20 +25,20 @@ public class Assembler {
         OPCODES.put("jmpl", 0x0E);
         // Add other opcodes as needed
 
-        REGISTERS.put("r1", 0x00);
-        REGISTERS.put("r2", 0x01);
-        REGISTERS.put("r3", 0x02);
-        REGISTERS.put("r4", 0x03);
-        REGISTERS.put("r5", 0x04);
-        REGISTERS.put("r6", 0x05);
-        REGISTERS.put("r7", 0x06);
-        REGISTERS.put("r8", 0x07);
+        REGISTERS.put("r0", 0x00);
+        REGISTERS.put("r1", 0x01);
+        REGISTERS.put("r2", 0x02);
+        REGISTERS.put("r3", 0x03);
+        REGISTERS.put("r4", 0x04);
+        REGISTERS.put("r5", 0x05);
+        REGISTERS.put("r6", 0x06);
+        REGISTERS.put("r7", 0x07);
         // Add other registers as needed
 
         ARG_COUNTS.put("mov",  2);
         ARG_COUNTS.put("str",  2);
         ARG_COUNTS.put("ld",   2);
-        ARG_COUNTS.put("jmp",  2);
+        ARG_COUNTS.put("jmp",  1);
         ARG_COUNTS.put("add",  3);
         ARG_COUNTS.put("sub",  3);
         ARG_COUNTS.put("mul",  3);
