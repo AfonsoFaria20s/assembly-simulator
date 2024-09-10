@@ -40,7 +40,7 @@ public class Main {
         if (!dataFile.exists()) {
             try (FileWriter writer = new FileWriter(dataFile)) {
                 String defaultJsonContent = "{\n" +
-                        "    \"lastOpen\": [\"C:\\\\Users\\\\Utilizador\\\\Assembly Simulator\\\\Projects\\\\lol.asm\"],\n" +
+                        "    \"lastOpen\": [\"\"],\n" +
                         "    \"settings\": {\n" +
                         "        \"theme\": \"light\",\n" +
                         "        \"fontSize\": 14,\n" +
