@@ -1,5 +1,6 @@
 package MainClasses;
 
+import GUI.windowComponents.FlagsPanel;
 import GUI.windowComponents.MemoryPanel;
 import GUI.windowComponents.RegistersPanel;
 
@@ -17,12 +18,14 @@ public class Assembly {
     private RegistersPanel registersPanel;
     private MemoryPanel memoryPanel;
     private Timer timer;
+    private FlagsPanel flagsPanel;
 
     // Constructor to initialize the program array, registers panel, and memory panel
-    public Assembly(int programSize, RegistersPanel registersPanel, MemoryPanel memoryPanel) {
+    public Assembly(int programSize, RegistersPanel registersPanel, MemoryPanel memoryPanel, FlagsPanel flagsPanel) {
         this.program = new int[programSize]; // Initialize program array with the specified size
         this.registersPanel = registersPanel; // Initialize registers panel
         this.memoryPanel = memoryPanel; // Initialize memory panel
+        this.flagsPanel = flagsPanel;
     }
 
     public void loadProgram(String[] rawprogram) {
@@ -35,6 +38,7 @@ public class Assembly {
     }
 
     public void execute() {
+        flagsPanel.resetFlags();
         final int delay = 500; // 500 milliseconds delay between iterations
         final int maxIterations = 1000; // Set a reasonable limit for debugging
 
@@ -57,24 +61,31 @@ public class Assembly {
                             break;
                         case 0x02: // ADD r1, r2, r3
                             register[r1] = register[r2] + register[addr];
+                            flagsPanel.updateFlags(register[r1]);
                             break;
                         case 0x03: // SUB r1, r2, r3
                             register[r1] = register[r2] - register[addr];
+                            flagsPanel.updateFlags(register[r1]);
                             break;
                         case 0x04: // MUL r1, r2, r3
                             register[r1] = register[r2] * register[addr];
+                            flagsPanel.updateFlags(register[r1]);
                             break;
                         case 0x05: // DIV r1, r2, r3
                             register[r1] = register[r2] / register[addr];
+                            flagsPanel.updateFlags(register[r1]);
                             break;
                         case 0x06: // AND r1, r2, r3
                             register[r1] = register[r2] & register[addr];
+                            flagsPanel.updateFlags(register[r1]);
                             break;
                         case 0x07: // OR r1, r2, r3
                             register[r1] = register[r2] | register[addr];
+                            flagsPanel.updateFlags(register[r1]);
                             break;
                         case 0x08: // STORE r1, addr
                             memory[addr] = register[r1];
+                            flagsPanel.updateFlags(register[r1]);
                             break;
                         case 0x09: // LOAD r1, addr
                             register[r1] = memory[addr];
@@ -120,6 +131,7 @@ public class Assembly {
                 } else {
                     // Stop the timer when done
                     timer.stop();
+                    flagsPanel.resetFlags();
                     if (iteration >= maxIterations) {
                         System.out.println("Execution halted: Maximum iterations reached.");
                     }

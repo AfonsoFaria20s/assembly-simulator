@@ -17,10 +17,12 @@ public class EditorPanel extends JPanel {
     private RegistersPanel registersPanel;
     private MemoryPanel memoryPanel;
     private FileHandler fileHandler;
+    private FlagsPanel flagsPanel;
 
-    public EditorPanel(RegistersPanel registersPanel, MemoryPanel memoryPanel) {
+    public EditorPanel(RegistersPanel registersPanel, MemoryPanel memoryPanel, FlagsPanel flagsPanel) {
         this.registersPanel = registersPanel;
         this.memoryPanel = memoryPanel;
+        this.flagsPanel = flagsPanel;
 
         setLayout(new BorderLayout());
         setBorder(BorderFactory.createTitledBorder("Editor"));
@@ -35,7 +37,7 @@ public class EditorPanel extends JPanel {
         add(scrollPane, BorderLayout.CENTER);
         //add(executeButton, BorderLayout.SOUTH);
 
-        assembly = new Assembly(editorTextPane.getDocument().getDefaultRootElement().getElementCount(), registersPanel, memoryPanel);
+        assembly = new Assembly(editorTextPane.getDocument().getDefaultRootElement().getElementCount(), registersPanel, memoryPanel, flagsPanel);
 
         /*executeButton.addActionListener(event -> {
             executeCode();
@@ -82,7 +84,7 @@ public class EditorPanel extends JPanel {
         String[] program = code.split("\\r?\\n");
 
         try {
-            assembly = new Assembly(program.length, registersPanel, memoryPanel);
+            assembly = new Assembly(program.length, registersPanel, memoryPanel, flagsPanel);
             assembly.loadProgram(program);
             assembly.execute();
         } catch (Exception e) {
@@ -109,10 +111,14 @@ public class EditorPanel extends JPanel {
         assembly.getTimer().stop();
         assembly.setPc(0);
         assembly.reset();
+
+        flagsPanel.resetFlags();
     }
 
     public void resetValues() {
         assembly.reset();
+
+        flagsPanel.resetFlags();
     }
 
     public JTextPane getTextEditor() {

@@ -32,7 +32,7 @@ public class Window extends JFrame {
         RegistersPanel registersPanel = new RegistersPanel();
         MemoryPanel memoryPanel = new MemoryPanel();
         FlagsPanel flagsPanel = new FlagsPanel();
-        EditorPanel editorPanel = new EditorPanel(registersPanel, memoryPanel);
+        EditorPanel editorPanel = new EditorPanel(registersPanel, memoryPanel, flagsPanel);
 
         // Pass the dataFile to the MenuPanel
         menuPanel = new MenuPanel(editorPanel, this, dataFile);
