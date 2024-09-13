@@ -64,10 +64,27 @@ public class Settings extends JFrame {
 
     public void save(String theme) throws UnsupportedLookAndFeelException {
         window.updateTheme(theme);
+        this.updateTheme(themeSettingsPanel.getTheme());
         this.dispose();
     }
 
     public void cancel() {
         this.dispose();
+    }
+
+    public void updateTheme(String theme) throws UnsupportedLookAndFeelException {
+        // Update the Look and Feel
+        if(theme.equalsIgnoreCase("dark")) {
+            UIManager.setLookAndFeel(new FlatDarkLaf());
+        } else if(theme.equalsIgnoreCase("light")) {
+            UIManager.setLookAndFeel(new FlatLightLaf());
+        }
+
+        // Rebuild the UI to reflect the new Look and Feel
+        SwingUtilities.updateComponentTreeUI(this);
+
+        // Revalidate and repaint the frame
+        this.revalidate();
+        this.repaint();
     }
 }
