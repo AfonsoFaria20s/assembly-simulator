@@ -4,87 +4,114 @@ import GUI.settingsComponents.AutoSavePanel;
 import GUI.settingsComponents.EditorPreferencesPanel;
 import GUI.settingsComponents.ShortcutsPanel;
 import GUI.settingsComponents.ThemeSettingsPanel;
+import GUI.windowComponents.EditorPanel;
 import com.formdev.flatlaf.FlatDarkLaf;
 import com.formdev.flatlaf.FlatLightLaf;
+import org.json.JSONObject;
 
 import javax.swing.*;
 import java.awt.*;
 import java.io.File;
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 
 public class Settings extends JFrame {
-    private ThemeSettingsPanel themeSettingsPanel = new ThemeSettingsPanel();
-    private Window window;
+    private final ThemeSettingsPanel themeSettingsPanel;
+    private final Window window;
+    private final File dataFile;
+    private final EditorPanel editorPanel;
 
-    public Settings(Window window) {
+    public Settings(Window window, File dataFile) throws IOException {
+        this.window = window;
+        this.dataFile = dataFile;
+        editorPanel = window.getEditorPanel();
+
         setTitle("Settings");
         setSize(700, 500);
         setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
-        setLocationRelativeTo(null); // Center the window on the screen
+        setLocationRelativeTo(null);
 
-        this.window = window;
-
-        // Main panel with a scrollable area
+        themeSettingsPanel = new ThemeSettingsPanel(loadThemeFromFile(dataFile), getFontSize());
         JPanel mainPanel = new JPanel();
         mainPanel.setLayout(new BoxLayout(mainPanel, BoxLayout.Y_AXIS));
         mainPanel.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
 
-        // Add settings panels
         mainPanel.add(themeSettingsPanel);
-        mainPanel.add(Box.createRigidArea(new Dimension(0, 10))); // Add spacing between panels
+        mainPanel.add(Box.createRigidArea(new Dimension(0, 10)));
         mainPanel.add(new EditorPreferencesPanel());
         mainPanel.add(Box.createRigidArea(new Dimension(0, 10)));
         mainPanel.add(new ShortcutsPanel());
         mainPanel.add(Box.createRigidArea(new Dimension(0, 10)));
         mainPanel.add(new AutoSavePanel());
 
-        // Scroll pane for the main panel
         JScrollPane scrollPane = new JScrollPane(mainPanel);
         scrollPane.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED);
 
-        // Bottom panel with Save and Cancel buttons
         JPanel buttonPanel = new JPanel(new FlowLayout(FlowLayout.RIGHT));
         JButton saveButton = new JButton("Save");
         JButton cancelButton = new JButton("Cancel");
-        buttonPanel.add(saveButton);
-        buttonPanel.add(cancelButton);
 
         saveButton.addActionListener(e -> {
             try {
-                save(themeSettingsPanel.getTheme());
-            } catch (UnsupportedLookAndFeelException ex) {
-                throw new RuntimeException(ex);
+                saveSettings();
+            } catch (IOException | UnsupportedLookAndFeelException ex) {
+                ex.printStackTrace();
             }
         });
-        cancelButton.addActionListener(e -> cancel());
 
-        // Add components to the frame
+        cancelButton.addActionListener(e -> dispose());
+
+        buttonPanel.add(saveButton);
+        buttonPanel.add(cancelButton);
+
         add(scrollPane, BorderLayout.CENTER);
         add(buttonPanel, BorderLayout.SOUTH);
+
     }
 
-    public void save(String theme) throws UnsupportedLookAndFeelException {
-        window.updateTheme(theme);
-        this.updateTheme(themeSettingsPanel.getTheme());
-        this.dispose();
+    private void saveSettings() throws IOException, UnsupportedLookAndFeelException {
+        /*
+            SAVE THEMES
+         */
+        String selectedTheme = themeSettingsPanel.getSelectedTheme();
+        window.updateTheme(window, selectedTheme);
+        window.updateTheme(this, selectedTheme);
+        saveThemeToFile(selectedTheme);
+        /*
+            SAVE FONT SIZE
+         */
+        editorPanel.updateFontSize(getFontSize());
+        saveFontSizeToFile(themeSettingsPanel.getSelectedFontSize());
+
+        dispose();
     }
 
-    public void cancel() {
-        this.dispose();
+    private int getFontSize() throws IOException {
+        String content = new String(Files.readAllBytes(Paths.get(dataFile.getAbsolutePath())));
+        JSONObject jsonObject = new JSONObject(content);
+        return Integer.parseInt(jsonObject.getJSONObject("settings").get("fontSize").toString());
     }
 
-    public void updateTheme(String theme) throws UnsupportedLookAndFeelException {
-        // Update the Look and Feel
-        if(theme.equalsIgnoreCase("dark")) {
-            UIManager.setLookAndFeel(new FlatDarkLaf());
-        } else if(theme.equalsIgnoreCase("light")) {
-            UIManager.setLookAndFeel(new FlatLightLaf());
-        }
+    private void saveFontSizeToFile(int fontSize) throws IOException {
+        String content = new String(Files.readAllBytes(Paths.get(dataFile.getAbsolutePath())));
+        JSONObject jsonObject = new JSONObject(content);
+        jsonObject.getJSONObject("settings").put("fontSize", fontSize);
 
-        // Rebuild the UI to reflect the new Look and Feel
-        SwingUtilities.updateComponentTreeUI(this);
+        Files.write(Paths.get(dataFile.getAbsolutePath()), jsonObject.toString(4).getBytes());
+    }
 
-        // Revalidate and repaint the frame
-        this.revalidate();
-        this.repaint();
+    private void saveThemeToFile(String theme) throws IOException {
+        String content = new String(Files.readAllBytes(Paths.get(dataFile.getAbsolutePath())));
+        JSONObject jsonObject = new JSONObject(content);
+        jsonObject.getJSONObject("settings").put("theme", theme);
+
+        Files.write(Paths.get(dataFile.getAbsolutePath()), jsonObject.toString(4).getBytes());
+    }
+
+    public static String loadThemeFromFile(File file) throws IOException {
+        String content = new String(Files.readAllBytes(Paths.get(file.getAbsolutePath())));
+        JSONObject jsonObject = new JSONObject(content);
+        return jsonObject.getJSONObject("settings").getString("theme");
     }
 }

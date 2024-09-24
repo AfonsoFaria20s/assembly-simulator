@@ -128,4 +128,10 @@ public class EditorPanel extends JPanel {
     public RegistersPanel getRegistersPanel() {
         return registersPanel;
     }
+
+    public void updateFontSize(int fontSize) {
+        lineNumberArea.setFont(new Font("Monospaced", Font.PLAIN, fontSize));
+        editorTextPane.setFont(new Font("Monospaced", Font.PLAIN, fontSize));
+        SwingUtilities.updateComponentTreeUI(this);
+    }
 }

@@ -3,17 +3,23 @@ package GUI;
 import GUI.windowComponents.*;
 import com.formdev.flatlaf.FlatDarkLaf;
 import com.formdev.flatlaf.FlatLightLaf;
+import org.json.JSONObject;
+
 import javax.swing.*;
 import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 import java.io.File;
 import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 
 public class Window extends JFrame {
     private MenuPanel menuPanel;
+    private RegistersPanel registersPanel = new RegistersPanel();
+    private MemoryPanel memoryPanel = new MemoryPanel();
+    private FlagsPanel flagsPanel = new FlagsPanel();
+    private EditorPanel editorPanel = new EditorPanel(registersPanel, memoryPanel, flagsPanel);
 
     public Window(File dataFile) throws IOException, UnsupportedLookAndFeelException {
         setTitle("Assembly Simulator");
@@ -25,14 +31,14 @@ public class Window extends JFrame {
         ImageIcon image = new ImageIcon("src/main/resources/logo.png");
         setIconImage(image.getImage());
 
-        // Default theme
-        updateTheme("Dark");
+        // Read the theme from data.json
+        updateTheme(this, loadThemeFromFile(dataFile));
 
         // Create panels for registers, memory, flags, editor, and menu
-        RegistersPanel registersPanel = new RegistersPanel();
-        MemoryPanel memoryPanel = new MemoryPanel();
-        FlagsPanel flagsPanel = new FlagsPanel();
-        EditorPanel editorPanel = new EditorPanel(registersPanel, memoryPanel, flagsPanel);
+        registersPanel = new RegistersPanel();
+        memoryPanel = new MemoryPanel();
+        flagsPanel = new FlagsPanel();
+        editorPanel = new EditorPanel(registersPanel, memoryPanel, flagsPanel);
 
         // Pass the dataFile to the MenuPanel
         menuPanel = new MenuPanel(editorPanel, this, dataFile);
@@ -60,6 +66,7 @@ public class Window extends JFrame {
         // Add main split pane to the frame
         add(mainSplitPane, BorderLayout.CENTER);
 
+        // Handle window closing events (to save any unsaved work)
         addWindowListener(new WindowAdapter() {
             @Override
             public void windowClosing(WindowEvent e) {
@@ -68,27 +75,44 @@ public class Window extends JFrame {
         });
     }
 
+    // Method to open the last file if available
     public void openLastFile(String lastOpenFilePath) {
-        menuPanel.getFileHandler().openFile(new File(lastOpenFilePath));
+        if (lastOpenFilePath != null && !lastOpenFilePath.isEmpty()) {
+            menuPanel.getFileHandler().openFile(new File(lastOpenFilePath));
+            System.out.println("Opened last file: " + lastOpenFilePath);
+        }
     }
 
+    // Update window title
     public void updateTitle(String title) {
         this.setTitle("Assembly Simulator - " + title);
     }
 
-    public void updateTheme(String theme) throws UnsupportedLookAndFeelException {
+    // Update UI theme based on the user's selection (dark or light mode)
+    public void updateTheme(JFrame frame, String theme) throws UnsupportedLookAndFeelException {
         // Update the Look and Feel
-        if(theme.equalsIgnoreCase("dark")) {
+        if (theme.equalsIgnoreCase("dark")) {
             UIManager.setLookAndFeel(new FlatDarkLaf());
-        } else if(theme.equalsIgnoreCase("light")) {
+        } else if (theme.equalsIgnoreCase("light")) {
             UIManager.setLookAndFeel(new FlatLightLaf());
         }
 
         // Rebuild the UI to reflect the new Look and Feel
-        SwingUtilities.updateComponentTreeUI(this);
+        SwingUtilities.updateComponentTreeUI(frame);
 
         // Revalidate and repaint the frame
         this.revalidate();
         this.repaint();
+    }
+
+    // Method to load the theme from data.json
+    private String loadThemeFromFile(File dataFile) throws IOException {
+        String content = new String(Files.readAllBytes(Paths.get(dataFile.getAbsolutePath())));
+        JSONObject jsonObject = new JSONObject(content);
+        return jsonObject.getJSONObject("settings").getString("theme");
+    }
+
+    public EditorPanel getEditorPanel() {
+        return editorPanel;
     }
 }

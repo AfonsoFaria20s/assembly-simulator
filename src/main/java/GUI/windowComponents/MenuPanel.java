@@ -10,14 +10,14 @@ import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.File;
-import java.util.TimerTask;
+import java.io.IOException;
 
 public class MenuPanel extends JPanel {
     private FileHandler fileHandler;
     private Settings settings;
 
-    public MenuPanel(EditorPanel editorPanel, Window window, File dataFile) {
-        this.settings = new Settings(window);
+    public MenuPanel(EditorPanel editorPanel, Window window, File dataFile) throws IOException {
+        this.settings = new Settings(window, dataFile);
         // Pass dataFile to ConfigManager
         ConfigManager configManager = new ConfigManager(dataFile);
 
