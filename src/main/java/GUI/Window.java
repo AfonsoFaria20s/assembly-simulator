@@ -16,10 +16,10 @@ import java.nio.file.Paths;
 
 public class Window extends JFrame {
     private MenuPanel menuPanel;
-    private RegistersPanel registersPanel = new RegistersPanel();
-    private MemoryPanel memoryPanel = new MemoryPanel();
-    private FlagsPanel flagsPanel = new FlagsPanel();
-    private EditorPanel editorPanel = new EditorPanel(registersPanel, memoryPanel, flagsPanel);
+    private RegistersPanel registersPanel;
+    private MemoryPanel memoryPanel;
+    private FlagsPanel flagsPanel;
+    private EditorPanel editorPanel;
 
     public Window(File dataFile) throws IOException, UnsupportedLookAndFeelException {
         setTitle("Assembly Simulator");
@@ -28,17 +28,18 @@ public class Window extends JFrame {
         setExtendedState(JFrame.MAXIMIZED_BOTH);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setVisible(true);
-        ImageIcon image = new ImageIcon("src/main/resources/logo.png");
-        setIconImage(image.getImage());
 
-        // Read the theme from data.json
-        updateTheme(this, loadThemeFromFile(dataFile));
+        // Read the theme and font size from data.json
+        String theme = loadThemeFromFile(dataFile);
+        int fontSize = getFontSizeFromFile(dataFile);
+
+        updateTheme(this, theme);
 
         // Create panels for registers, memory, flags, editor, and menu
         registersPanel = new RegistersPanel();
         memoryPanel = new MemoryPanel();
         flagsPanel = new FlagsPanel();
-        editorPanel = new EditorPanel(registersPanel, memoryPanel, flagsPanel);
+        editorPanel = new EditorPanel(registersPanel, memoryPanel, flagsPanel, fontSize);
 
         // Pass the dataFile to the MenuPanel
         menuPanel = new MenuPanel(editorPanel, this, dataFile);
@@ -75,17 +76,19 @@ public class Window extends JFrame {
         });
     }
 
+    // Method to get the font size from data.json
+    private int getFontSizeFromFile(File dataFile) throws IOException {
+        String content = new String(Files.readAllBytes(Paths.get(dataFile.getAbsolutePath())));
+        JSONObject jsonObject = new JSONObject(content);
+        return jsonObject.getJSONObject("settings").getInt("fontSize");
+    }
+
     // Method to open the last file if available
     public void openLastFile(String lastOpenFilePath) {
         if (lastOpenFilePath != null && !lastOpenFilePath.isEmpty()) {
             menuPanel.getFileHandler().openFile(new File(lastOpenFilePath));
             System.out.println("Opened last file: " + lastOpenFilePath);
         }
-    }
-
-    // Update window title
-    public void updateTitle(String title) {
-        this.setTitle("Assembly Simulator - " + title);
     }
 
     // Update UI theme based on the user's selection (dark or light mode)
@@ -110,6 +113,11 @@ public class Window extends JFrame {
         String content = new String(Files.readAllBytes(Paths.get(dataFile.getAbsolutePath())));
         JSONObject jsonObject = new JSONObject(content);
         return jsonObject.getJSONObject("settings").getString("theme");
+    }
+
+    // Update window title
+    public void updateTitle(String title) {
+        this.setTitle("Assembly Simulator - " + title);
     }
 
     public EditorPanel getEditorPanel() {

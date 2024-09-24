@@ -12,36 +12,31 @@ import java.awt.*;
 public class EditorPanel extends JPanel {
     private JTextPane editorTextPane;
     private JTextArea lineNumberArea;
-    // private JButton executeButton;
     private Assembly assembly;
     private RegistersPanel registersPanel;
     private MemoryPanel memoryPanel;
     private FileHandler fileHandler;
     private FlagsPanel flagsPanel;
 
-    public EditorPanel(RegistersPanel registersPanel, MemoryPanel memoryPanel, FlagsPanel flagsPanel) {
+    private int startingFontSize;
+
+    public EditorPanel(RegistersPanel registersPanel, MemoryPanel memoryPanel, FlagsPanel flagsPanel, int fontSize) {
         this.registersPanel = registersPanel;
         this.memoryPanel = memoryPanel;
         this.flagsPanel = flagsPanel;
+        this.startingFontSize = fontSize;
 
         setLayout(new BorderLayout());
         setBorder(BorderFactory.createTitledBorder("Editor"));
 
         editorTextPane = new JTextPane();
-        editorTextPane.setFont(new Font("Monospaced", Font.PLAIN, 16));
+        editorTextPane.setFont(new Font("Monospaced", Font.PLAIN, startingFontSize));
         JScrollPane scrollPane = new JScrollPane(editorTextPane);
         scrollPane.setRowHeaderView(createLineNumberArea());
 
-        //executeButton = new JButton("Execute");
-
         add(scrollPane, BorderLayout.CENTER);
-        //add(executeButton, BorderLayout.SOUTH);
 
         assembly = new Assembly(editorTextPane.getDocument().getDefaultRootElement().getElementCount(), registersPanel, memoryPanel, flagsPanel);
-
-        /*executeButton.addActionListener(event -> {
-            executeCode();
-        });*/
 
         editorTextPane.getDocument().addDocumentListener(new DocumentListener() {
             @Override
@@ -65,7 +60,7 @@ public class EditorPanel extends JPanel {
         lineNumberArea = new JTextArea();
         lineNumberArea.setEditable(false);
         lineNumberArea.setBorder(new LineBorder(Color.LIGHT_GRAY, 1, false));
-        lineNumberArea.setFont(new Font("Monospaced", Font.PLAIN, 16));
+        lineNumberArea.setFont(new Font("Monospaced", Font.PLAIN, startingFontSize));
         updateLineNumbers();
         return lineNumberArea;
     }
@@ -92,7 +87,7 @@ public class EditorPanel extends JPanel {
             JFrame parentFrame = (JFrame) SwingUtilities.getWindowAncestor(this);
             JOptionPane.showMessageDialog(
                     parentFrame,
-                    e.getMessage()+"\n"+e.getClass().getName(),
+                    e.getMessage() + "\n" + e.getClass().getName(),
                     "Error",
                     JOptionPane.WARNING_MESSAGE
             );
@@ -130,6 +125,7 @@ public class EditorPanel extends JPanel {
     }
 
     public void updateFontSize(int fontSize) {
+        startingFontSize = fontSize;
         lineNumberArea.setFont(new Font("Monospaced", Font.PLAIN, fontSize));
         editorTextPane.setFont(new Font("Monospaced", Font.PLAIN, fontSize));
         SwingUtilities.updateComponentTreeUI(this);

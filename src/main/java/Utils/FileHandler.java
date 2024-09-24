@@ -4,6 +4,7 @@ import GUI.Window;
 import GUI.windowComponents.EditorPanel;
 
 import javax.swing.*;
+import javax.swing.filechooser.FileNameExtensionFilter;
 import java.io.*;
 
 public class FileHandler {
@@ -20,6 +21,8 @@ public class FileHandler {
         this.window = window;
         this.configManager = configManager;
         this.fileChooser = new JFileChooser(configManager.getProgramFolder());
+        this.fileChooser.setFileFilter(new FileNameExtensionFilter("Assembly Files (*.asm)","asm"));
+        this.fileChooser.addChoosableFileFilter(new FileNameExtensionFilter("asm","asm"));
         this.tempFile = new File(projectFolder, "temp.asm"); // Initialize tempFile with the path to temp.asm
     }
 

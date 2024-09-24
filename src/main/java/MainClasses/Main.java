@@ -9,7 +9,6 @@ import java.io.FileWriter;
 import java.io.IOException;
 
 public class Main {
-
     private static ConfigManager configManager;
 
     public static void generateDefaultProgramDirectory(File programFolder, File projectsFolder, File dataFile, File tempFile) throws IOException {

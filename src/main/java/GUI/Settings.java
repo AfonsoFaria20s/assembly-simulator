@@ -81,8 +81,8 @@ public class Settings extends JFrame {
         /*
             SAVE FONT SIZE
          */
-        editorPanel.updateFontSize(getFontSize());
         saveFontSizeToFile(themeSettingsPanel.getSelectedFontSize());
+        editorPanel.updateFontSize(getFontSize());
 
         dispose();
     }
