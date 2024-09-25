@@ -55,37 +55,55 @@ public class Assembly {
                     int r2 = (instruction >> 8) & 0xFF;
                     int addr = instruction & 0xFF;
 
+                    boolean carry = false;
+                    boolean overflow = false;
+
                     switch (opcode) {
                         case 0x01: // MOV r1, imm
                             register[r1] = addr;
                             break;
                         case 0x02: // ADD r1, r2, r3
-                            register[r1] = register[r2] + register[addr];
-                            flagsPanel.updateFlags(register[r1]);
+                            long result = (long)register[r2] + (long)register[addr];  // Using long to detect carry
+                            carry = (result > Integer.MAX_VALUE);  // Check if result exceeds max int (32-bit)
+                            overflow = ((register[r2] > 0 && register[addr] > 0 && result < 0) ||
+                                    (register[r2] < 0 && register[addr] < 0 && result > 0));  // Check overflow
+                            register[r1] = (int)result;  // Store result
+                            flagsPanel.updateFlags(register[r1], carry, overflow); // Update flags
                             break;
                         case 0x03: // SUB r1, r2, r3
-                            register[r1] = register[r2] - register[addr];
-                            flagsPanel.updateFlags(register[r1]);
+                            result = (long)register[r2] - (long)register[addr];  // Using long to detect carry
+                            carry = (register[r2] < register[addr]);  // Borrow detection for unsigned
+                            overflow = ((register[r2] > 0 && register[addr] < 0 && result < 0) ||
+                                    (register[r2] < 0 && register[addr] > 0 && result > 0));  // Check overflow
+                            register[r1] = (int)result;
+                            flagsPanel.updateFlags(register[r1], carry, overflow); // Update flags
                             break;
                         case 0x04: // MUL r1, r2, r3
-                            register[r1] = register[r2] * register[addr];
-                            flagsPanel.updateFlags(register[r1]);
+                            result = (long)register[r2] * (long)register[addr];  // Multiplication
+                            carry = (result > Integer.MAX_VALUE || result < Integer.MIN_VALUE);  // Check overflow
+                            overflow = (register[r2] != 0 && result / register[r2] != register[addr]);  // Overflow
+                            register[r1] = (int)result;
+                            flagsPanel.updateFlags(register[r1], carry, overflow); // Update flags
                             break;
                         case 0x05: // DIV r1, r2, r3
-                            register[r1] = register[r2] / register[addr];
-                            flagsPanel.updateFlags(register[r1]);
+                            if (register[addr] != 0) {
+                                result = register[r2] / register[addr];
+                                overflow = (register[r2] == Integer.MIN_VALUE && register[addr] == -1);  // Special case overflow
+                                register[r1] = (int)result;
+                                flagsPanel.updateFlags(register[r1], false, overflow); // Update flags (no carry in division)
+                            }
                             break;
                         case 0x06: // AND r1, r2, r3
                             register[r1] = register[r2] & register[addr];
-                            flagsPanel.updateFlags(register[r1]);
+                            flagsPanel.updateFlags(register[r1], false, false);
                             break;
                         case 0x07: // OR r1, r2, r3
                             register[r1] = register[r2] | register[addr];
-                            flagsPanel.updateFlags(register[r1]);
+                            flagsPanel.updateFlags(register[r1], false, false);
                             break;
                         case 0x08: // STORE r1, addr
                             memory[addr] = register[r1];
-                            flagsPanel.updateFlags(register[r1]);
+                            flagsPanel.updateFlags(register[r1], false, false);
                             break;
                         case 0x09: // LOAD r1, addr
                             register[r1] = memory[addr];
@@ -152,35 +170,14 @@ public class Assembly {
         // Reset PC if needed
         pc = 0;
 
-        // Optionally update the UI
-        SwingUtilities.invokeLater(() -> {
-            registersPanel.getRegistersTable().updateRegisterValues(register);
-            memoryPanel.updateMemoryValues(memory);
-        });
+        // Update UI panels
+        registersPanel.getRegistersTable().updateRegisterValues(register);
+        memoryPanel.updateMemoryValues(memory);
+        flagsPanel.resetFlags();
     }
 
     public Timer getTimer() {
         return this.timer;
-    }
-
-    public int[] getRegister() {
-        return register;
-    }
-
-    public void setRegister(int[] register) {
-        this.register = register;
-    }
-
-    public int[] getMemory() {
-        return memory;
-    }
-
-    public void setMemory(int[] memory) {
-        this.memory = memory;
-    }
-
-    public int getPc() {
-        return pc;
     }
 
     public void setPc(int pc) {
