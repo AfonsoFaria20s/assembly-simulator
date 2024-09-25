@@ -1,12 +1,7 @@
 package GUI;
 
-import GUI.settingsComponents.AutoSavePanel;
-import GUI.settingsComponents.EditorPreferencesPanel;
-import GUI.settingsComponents.ShortcutsPanel;
-import GUI.settingsComponents.ThemeSettingsPanel;
+import GUI.settingsComponents.*;
 import GUI.windowComponents.EditorPanel;
-import com.formdev.flatlaf.FlatDarkLaf;
-import com.formdev.flatlaf.FlatLightLaf;
 import org.json.JSONObject;
 
 import javax.swing.*;
@@ -18,6 +13,7 @@ import java.nio.file.Paths;
 
 public class Settings extends JFrame {
     private final ThemeSettingsPanel themeSettingsPanel;
+    private final ProgramExecutionPanel programExecution;
     private final Window window;
     private final File dataFile;
     private final EditorPanel editorPanel;
@@ -33,6 +29,8 @@ public class Settings extends JFrame {
         setLocationRelativeTo(null);
 
         themeSettingsPanel = new ThemeSettingsPanel(loadThemeFromFile(dataFile), getFontSize());
+        programExecution = new ProgramExecutionPanel();
+
         JPanel mainPanel = new JPanel();
         mainPanel.setLayout(new BoxLayout(mainPanel, BoxLayout.Y_AXIS));
         mainPanel.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
@@ -44,6 +42,8 @@ public class Settings extends JFrame {
         mainPanel.add(new ShortcutsPanel());
         mainPanel.add(Box.createRigidArea(new Dimension(0, 10)));
         mainPanel.add(new AutoSavePanel());
+        mainPanel.add(Box.createRigidArea(new Dimension(0, 10)));
+        mainPanel.add(programExecution);
 
         JScrollPane scrollPane = new JScrollPane(mainPanel);
         scrollPane.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED);
@@ -83,6 +83,10 @@ public class Settings extends JFrame {
          */
         saveFontSizeToFile(themeSettingsPanel.getSelectedFontSize());
         editorPanel.updateFontSize(getFontSize());
+        /*
+            SAVE INSTRUCTION DELAY
+         */
+        programExecution.updateSettingsDelay(dataFile);
 
         dispose();
     }

@@ -80,7 +80,7 @@ public class MenuPanel extends JPanel {
         menuBar.add(helpMenu);
 
         aboutItem.addActionListener(e -> JOptionPane.showMessageDialog(null,
-                "FonSim v1.1.0\nCustom Assembly Simulator.",
+                "FonSim v1.1.3\nCustom Assembly Simulator.",
                 "About",
                 JOptionPane.INFORMATION_MESSAGE));
 

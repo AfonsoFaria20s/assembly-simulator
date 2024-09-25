@@ -1,5 +1,6 @@
 package MainClasses;
 
+import GUI.settingsComponents.ProgramExecutionPanel;
 import GUI.windowComponents.FlagsPanel;
 import GUI.windowComponents.MemoryPanel;
 import GUI.windowComponents.RegistersPanel;
@@ -10,37 +11,37 @@ import java.awt.event.ActionListener;
 import java.util.Arrays;
 
 public class Assembly {
-    private int[] register = new int[8]; // Array of registers (8 registers)
-    private int[] memory = new int[256]; // Array of memory (256 bytes)
+    private int[] register = new int[8];
+    private int[] memory = new int[256];
 
-    private int pc = 0; // Program Counter
-    private int[] program; // The program to be executed
+    private int pc = 0;
+    private int[] program;
+    private int delay = 500;
+
     private RegistersPanel registersPanel;
     private MemoryPanel memoryPanel;
     private Timer timer;
     private FlagsPanel flagsPanel;
 
-    // Constructor to initialize the program array, registers panel, and memory panel
     public Assembly(int programSize, RegistersPanel registersPanel, MemoryPanel memoryPanel, FlagsPanel flagsPanel) {
-        this.program = new int[programSize]; // Initialize program array with the specified size
-        this.registersPanel = registersPanel; // Initialize registers panel
-        this.memoryPanel = memoryPanel; // Initialize memory panel
+        this.program = new int[programSize];
+        this.registersPanel = registersPanel;
+        this.memoryPanel = memoryPanel;
         this.flagsPanel = flagsPanel;
     }
 
-    public void loadProgram(String[] rawprogram) {
-        int length = Math.min(program.length, rawprogram.length); // Use program length to avoid out-of-bounds
+    public void loadProgram(String[] rawProgram) {
+        int length = Math.min(program.length, rawProgram.length);
         Assembler assembler = new Assembler();
         for (int i = 0; i < length; i++) {
-            int instruction = assembler.parseInstruction(rawprogram[i]);
+            int instruction = assembler.parseInstruction(rawProgram[i]);
             program[i] = instruction;
         }
     }
 
     public void execute() {
         flagsPanel.resetFlags();
-        final int delay = 500; // 500 milliseconds delay between iterations
-        final int maxIterations = 1000; // Set a reasonable limit for debugging
+        final int maxIterations = 1000;
 
         ActionListener taskPerIteration = new ActionListener() {
             private int iteration = 0;
@@ -63,34 +64,34 @@ public class Assembly {
                             register[r1] = addr;
                             break;
                         case 0x02: // ADD r1, r2, r3
-                            long result = (long)register[r2] + (long)register[addr];  // Using long to detect carry
-                            carry = (result > Integer.MAX_VALUE);  // Check if result exceeds max int (32-bit)
+                            long result = (long) register[r2] + (long) register[addr];
+                            carry = (result > Integer.MAX_VALUE);
                             overflow = ((register[r2] > 0 && register[addr] > 0 && result < 0) ||
-                                    (register[r2] < 0 && register[addr] < 0 && result > 0));  // Check overflow
-                            register[r1] = (int)result;  // Store result
-                            flagsPanel.updateFlags(register[r1], carry, overflow); // Update flags
+                                    (register[r2] < 0 && register[addr] < 0 && result > 0));
+                            register[r1] = (int) result;
+                            flagsPanel.updateFlags(register[r1], carry, overflow);
                             break;
                         case 0x03: // SUB r1, r2, r3
-                            result = (long)register[r2] - (long)register[addr];  // Using long to detect carry
-                            carry = (register[r2] < register[addr]);  // Borrow detection for unsigned
+                            result = (long) register[r2] - (long) register[addr];
+                            carry = (register[r2] < register[addr]);
                             overflow = ((register[r2] > 0 && register[addr] < 0 && result < 0) ||
-                                    (register[r2] < 0 && register[addr] > 0 && result > 0));  // Check overflow
-                            register[r1] = (int)result;
-                            flagsPanel.updateFlags(register[r1], carry, overflow); // Update flags
+                                    (register[r2] < 0 && register[addr] > 0 && result > 0));
+                            register[r1] = (int) result;
+                            flagsPanel.updateFlags(register[r1], carry, overflow);
                             break;
                         case 0x04: // MUL r1, r2, r3
-                            result = (long)register[r2] * (long)register[addr];  // Multiplication
-                            carry = (result > Integer.MAX_VALUE || result < Integer.MIN_VALUE);  // Check overflow
-                            overflow = (register[r2] != 0 && result / register[r2] != register[addr]);  // Overflow
-                            register[r1] = (int)result;
-                            flagsPanel.updateFlags(register[r1], carry, overflow); // Update flags
+                            result = (long) register[r2] * (long) register[addr];
+                            carry = (result > Integer.MAX_VALUE || result < Integer.MIN_VALUE);
+                            overflow = (register[r2] != 0 && result / register[r2] != register[addr]);
+                            register[r1] = (int) result;
+                            flagsPanel.updateFlags(register[r1], carry, overflow);
                             break;
                         case 0x05: // DIV r1, r2, r3
                             if (register[addr] != 0) {
                                 result = register[r2] / register[addr];
-                                overflow = (register[r2] == Integer.MIN_VALUE && register[addr] == -1);  // Special case overflow
-                                register[r1] = (int)result;
-                                flagsPanel.updateFlags(register[r1], false, overflow); // Update flags (no carry in division)
+                                overflow = (register[r2] == Integer.MIN_VALUE && register[addr] == -1);
+                                register[r1] = (int) result;
+                                flagsPanel.updateFlags(register[r1], false, overflow);
                             }
                             break;
                         case 0x06: // AND r1, r2, r3
@@ -138,7 +139,6 @@ public class Assembly {
                             break;
                     }
 
-                    // Update the UI with new register and memory values
                     SwingUtilities.invokeLater(() -> {
                         registersPanel.getRegistersTable().updateRegisterValues(register);
                         memoryPanel.updateMemoryValues(memory);
@@ -147,7 +147,6 @@ public class Assembly {
                     pc++;
                     iteration++;
                 } else {
-                    // Stop the timer when done
                     timer.stop();
                     flagsPanel.resetFlags();
                     if (iteration >= maxIterations) {
@@ -157,20 +156,14 @@ public class Assembly {
             }
         };
 
-        // Create a timer that calls the taskPerIteration every 'delay' milliseconds
         timer = new Timer(delay, taskPerIteration);
         timer.start();
     }
 
     public void reset() {
-        // Reset memory and registers to 0
         Arrays.fill(memory, 0);
         Arrays.fill(register, 0);
-
-        // Reset PC if needed
         pc = 0;
-
-        // Update UI panels
         registersPanel.getRegistersTable().updateRegisterValues(register);
         memoryPanel.updateMemoryValues(memory);
         flagsPanel.resetFlags();
@@ -182,5 +175,12 @@ public class Assembly {
 
     public void setPc(int pc) {
         this.pc = pc;
+    }
+
+    public void updateDelay(int newDelay) {
+        this.delay = newDelay;
+        if (timer != null) {
+            timer.setDelay(newDelay);
+        }
     }
 }

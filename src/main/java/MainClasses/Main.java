@@ -51,9 +51,9 @@ public class Main {
                         {
                             "lastOpen": [""],
                             "settings": {
-                                "theme": "light",
-                                "fontSize": 14,
-                                "autoSaveInterval": 5
+                                "theme": "dark",
+                                "fontSize": 16,
+                                "autoSaveInterval": 1
                             },
                             "editorPreferences": {
                                 "numberType": "hex",
@@ -64,6 +64,9 @@ public class Main {
                             "shortcuts": {
                                 "openFile": "Ctrl+O",
                                 "saveFile": "Ctrl+S"
+                            },
+                            "programExecution": {
+                                "instructionDelay": 500
                             }
                         }
                         """;
