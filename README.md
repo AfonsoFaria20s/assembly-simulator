@@ -29,6 +29,7 @@ FonSim is a basic assembly language simulator written in Java. It simulates the 
 - **JMPN r1, r2, addr** (0x0C): Conditional jump to address `addr` if the value of register `r1` does not equal the value of register `r2`.
 - **JMPG r1, r2, addr** (0x0D): Conditional jump to address `addr` if the value of register `r1` is greater than the value of register `r2`.
 - **JMPL r1, r2, addr** (0x0E): Conditional jump to address `addr` if the value of register `r1` is less than the value of register `r2`.
+- **JMPR r1** (0x0F): Relative jump to address `current + r1`, basically add a number to jump as many relative to the current address.
 
 ## Usage
 

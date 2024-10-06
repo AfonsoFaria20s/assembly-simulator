@@ -132,6 +132,14 @@ public class Assembly {
                                 pc = addr - 1;
                             }
                             break;
+                        case 0x0F: // JMPR r1
+                            int offset = register[r1];
+                            pc += offset;
+                            if (pc < 0 || pc >= program.length) {
+                                System.out.println("PC out of bounds!");
+                                pc = program.length; // Stop execution
+                            }
+                            break;
                         case 0xFF: // NO OP
                             break;
                         default:
